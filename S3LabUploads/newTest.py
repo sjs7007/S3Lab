@@ -7,13 +7,20 @@ import input_data
 import zipfile
 import sys, json
 
-#lines = sys.stdin.readlines()
+lines = sys.stdin.readlines()
+lines = lines[0].replace("\\", "")
+lines = lines[1:len(lines)-1]
+#print lines
+
+#print "as"
 #print lines[0]
-lines = '{"width":"28","height":"28","nClass":"10","alpha":"0.01"}'
+#lines = '{"width":"28","height":"28","nClass":"10","alpha":"0.01"}'
 
 
 paramtersDict = json.loads(lines)
-print paramtersDict
+#print paramtersDict
+
+#print paramtersDict
 
 zip_ref = zipfile.ZipFile("MNIST_data.zip", 'r')
 zip_ref.extractall()
@@ -21,6 +28,7 @@ zip_ref.close()
 
 
 mnist = input_data.read_data_sets("MNIST_data", one_hot=True)
+print "Loaded data."
 
 import tensorflow as tf
 
