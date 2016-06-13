@@ -5,6 +5,15 @@
 import tensorflow.examples.tutorials.mnist.input_data
 import input_data
 import zipfile
+import sys, json
+
+#lines = sys.stdin.readlines()
+#print lines[0]
+lines = '{"width":"28","height":"28","nClass":"10","alpha":"0.01"}'
+
+
+paramtersDict = json.loads(lines)
+print paramtersDict
 
 zip_ref = zipfile.ZipFile("MNIST_data.zip", 'r')
 zip_ref.extractall()
@@ -14,13 +23,27 @@ zip_ref.close()
 mnist = input_data.read_data_sets("MNIST_data", one_hot=True)
 
 import tensorflow as tf
-x = tf.placeholder(tf.float32, [None, 784])
-W = tf.Variable(tf.zeros([784, 10]))
-b = tf.Variable(tf.zeros([10]))
+
+size = int(paramtersDict['width']) * int(paramtersDict['height'])
+print "Input Vector Length : ",size
+
+nClass = int(paramtersDict['nClass'])
+print "Number of Classes : ", nClass
+
+alpha = float(paramtersDict['alpha'])
+print "Learning Rate : ", alpha
+
+#nClass = 10
+#alpha = 0.01
+
+
+x = tf.placeholder(tf.float32, [None, size])
+W = tf.Variable(tf.zeros([size, nClass]))
+b = tf.Variable(tf.zeros([nClass]))
 y = tf.nn.softmax(tf.matmul(x, W) + b)
-y_ = tf.placeholder(tf.float32, [None, 10])
+y_ = tf.placeholder(tf.float32, [None, nClass])
 cross_entropy = -tf.reduce_sum(y_*tf.log(y))
-train_step = tf.train.GradientDescentOptimizer(0.01).minimize(cross_entropy)
+train_step = tf.train.GradientDescentOptimizer(alpha).minimize(cross_entropy)
 init = tf.initialize_all_variables()
 
 sess = tf.Session()
@@ -32,4 +55,4 @@ for i in range(1000):
 
 correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-print sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels})
+print "Accuracy", sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels})

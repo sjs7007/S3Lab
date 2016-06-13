@@ -34,12 +34,13 @@ function uploadCompleteScript(response,request) {
 	form.parse(request,function(error,fields,files) {
 		console.log("parsing done.");
 		console.log(fields)
+		console.log(JSON.stringify(fields))
 		console.log("File name : "+files.upload.path);
 
 		var spawn = require('child_process').spawn,
 		    //py    = spawn('python', [files.upload.path]),
 		    py    = spawn('python', ['/home/shinchan/S3Lab/S3LabUploads/newTest.py'], {cwd:"/home/shinchan/S3Lab/S3LabUploads"}),
-		    data = '' ;
+		    data = JSON.stringify(fields) ;
 
 
 		py.stdout.on('data', function(data){
