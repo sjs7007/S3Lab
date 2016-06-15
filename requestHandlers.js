@@ -5,24 +5,32 @@ function start(response) {
 
 	fs.readFile('./index.html', function (err, html) {
 	    if (err) {
-	        throw err; 
-    	}       
-	    response.writeHead(200, {"Content-Type": "text/html"});  
-	    response.write(html);  
-	    response.end();  
+	        throw err;
+    	}
+	    response.writeHead(200, {"Content-Type": "text/html"});
+	    response.write(html);
+	    response.end();
     });
 }
-	
+
 
 
 function uploadCompleteScript(response,request) {
 	console.log("Request handler 'uploadCompleteScript' was called.");
 	var form = new formidable.IncomingForm();
+
 	//form.uploadDir = "/home/shinchan/S3Lab/S3LabUploads";
-	form.keepExtensions = true; 
+	form.keepExtensions = true;
+
+	console.log('form', form);
+	form.on('field', function(field, value) {
+		console.log('field', field);
+		console.log('value', value);
+	});
 
 	form.on('fileBegin', function(name, file) {
-        file.path = "/home/shinchan/S3Lab/S3LabUploads/"+file.name;
+        file.path = "S3LabUploads/"+file.name;
+		console.log('file', file);
     });
 
 
@@ -35,11 +43,12 @@ function uploadCompleteScript(response,request) {
 		console.log("parsing done.");
 		console.log(fields)
 		console.log(JSON.stringify(fields))
+		console.log('files', files);
 		console.log("File name : "+files.upload.path);
 
 		var spawn = require('child_process').spawn,
 		    //py    = spawn('python', [files.upload.path]),
-		    py    = spawn('python', ['/home/shinchan/S3Lab/S3LabUploads/newTest.py'], {cwd:"/home/shinchan/S3Lab/S3LabUploads"}),
+		    py    = spawn('python', ['S3LabUploads/newTest.py'], {cwd:"S3LabUploads"}),
 		    data = JSON.stringify(fields) ;
 
 
@@ -52,7 +61,7 @@ function uploadCompleteScript(response,request) {
 		console.log("here2");
 
 		py.stdout.on('end', function(){
-			//console.log(dataString);  
+			//console.log(dataString);
 			response.writeHead(200,{"Content-Type":"text/plain"});
 		    response.write(dataString);
 			response.end();
