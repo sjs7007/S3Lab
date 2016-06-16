@@ -61,6 +61,11 @@ function uploadCompleteScript(response,request) {
 
 		console.log("here2");
 
+		
+		py.stderr.on('data', function(data) {
+		  console.log('stdout: ' + data);
+		});
+
 		py.stdout.on('end', function(){
 			response.writeHead(200,{"Content-Type":"text/plain"});
 		    response.write(dataString);
