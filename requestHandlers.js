@@ -64,6 +64,7 @@ function uploadCompleteScript(response,request) {
 		
 		py.stderr.on('data', function(data) {
 		  console.log('stdout: ' + data);
+		  dataString += data.toString();
 		});
 
 		py.stdout.on('end', function(){
@@ -110,6 +111,11 @@ function MNISTPredictor(response,request) {
 		});
 
 		console.log("here2");
+
+		py.stderr.on('data', function(data) {
+		  console.log('stdout: ' + data);
+		  dataString += data.toString();
+		});
 
 		py.stdout.on('end', function(){
 			response.writeHead(200,{"Content-Type":"text/html"});
