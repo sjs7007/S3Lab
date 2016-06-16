@@ -33,19 +33,10 @@ function MNISTPredictorPage(response) {
 function uploadCompleteScript(response,request) {
 	console.log("Request handler 'uploadCompleteScript' was called.");
 	var form = new formidable.IncomingForm();
-
-	//form.uploadDir = "/home/shinchan/S3Lab/S3LabUploads";
 	form.keepExtensions = true;
 
-	console.log('form', form);
-	form.on('field', function(field, value) {
-		console.log('field', field);
-		console.log('value', value);
-	});
-
 	form.on('fileBegin', function(name, file) {
-        file.path = "S3LabUploads/"+file.name;
-		console.log('file', file);
+		file.path = "./S3LabUploads/"+file.name;
     });
 
 
@@ -53,17 +44,12 @@ function uploadCompleteScript(response,request) {
 	console.log("about to parse.");
 	var dataString = "";
 
-
 	form.parse(request,function(error,fields,files) {
 		console.log("parsing done.");
-		console.log(fields)
-		console.log(JSON.stringify(fields))
-		console.log('files', files);
 		console.log("File name : "+files.upload.path);
 
 		var spawn = require('child_process').spawn,
-		    //py    = spawn('python', [files.upload.path]),
-		    py    = spawn('python', ['S3LabUploads/newTest.py'], {cwd:"S3LabUploads"}),
+		    py    = spawn('python', ['./newTest.py'], {cwd:"./S3LabUploads"}),
 		    data = JSON.stringify(fields) ;
 
 
@@ -76,7 +62,6 @@ function uploadCompleteScript(response,request) {
 		console.log("here2");
 
 		py.stdout.on('end', function(){
-			//console.log(dataString);
 			response.writeHead(200,{"Content-Type":"text/plain"});
 		    response.write(dataString);
 			response.end();
@@ -90,11 +75,12 @@ function uploadCompleteScript(response,request) {
 function MNISTPredictor(response,request) {
 	console.log("Request handler 'MNISTPredictor' was called.");
 	var form = new formidable.IncomingForm();
-	//form.uploadDir = "/home/shinchan/S3Lab/S3LabUploads";
 	form.keepExtensions = true; 
+	var data = "";
 
 	form.on('fileBegin', function(name, file) {
-        file.path = "/home/shinchan/S3Lab/MNISTPredictor/"+file.name;
+        file.path = "./MNISTPredictor/"+file.name;
+        data = file.name;
     });
 
 
@@ -110,13 +96,10 @@ function MNISTPredictor(response,request) {
 		console.log("File name : "+files.upload.path);
 
 		var spawn = require('child_process').spawn,
-		    //py    = spawn('python', [files.upload.path]),
-		    py    = spawn('python', ['/home/shinchan/S3Lab/MNISTPredictor/predictSavedModel.py'], {cwd:"/home/shinchan/S3Lab/MNISTPredictor"}),
-		    data = files.upload.path ;
-
+		    py    = spawn('python', ['./predictSavedModel.py'], {cwd:"./MNISTPredictor"});
 
 		py.stdout.on('data', function(data){
-		  console.log("here1");
+		  console.log("here1 : "+data);
 		  console.log(data.toString());
 		  dataString += data.toString();
 		});
@@ -124,9 +107,10 @@ function MNISTPredictor(response,request) {
 		console.log("here2");
 
 		py.stdout.on('end', function(){
-			//console.log(dataString);  
-			response.writeHead(200,{"Content-Type":"text/plain"});
-		    response.write(dataString);
+			response.writeHead(200,{"Content-Type":"text/html"});
+			//var p1 = "<html> <img src="+files.upload.path+"> <br>";
+			var p2 = "Prediction is : "+dataString + "</html>";
+		    response.write(p2);
 			response.end();
 		});
 		py.stdin.write(JSON.stringify(data));

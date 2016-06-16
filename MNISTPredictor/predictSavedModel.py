@@ -3,6 +3,14 @@ import scipy
 import scipy.ndimage 
 import tensorflow as tf 
 import sys
+import os
+
+#print(os.getcwd())
+#change directory to that of script
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
+#print(os.getcwd())
 
 
 impath = sys.stdin.readlines()

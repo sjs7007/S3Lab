@@ -6,6 +6,14 @@ import tensorflow.examples.tutorials.mnist.input_data
 import input_data
 import zipfile
 import sys, json
+import os
+
+#print(os.getcwd())
+#change directory to that of script
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
+#print(os.getcwd())
 
 lines = sys.stdin.readlines()
 lines = lines[0].replace("\\", "")
