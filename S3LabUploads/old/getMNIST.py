@@ -17,14 +17,14 @@
 
 from __future__ import absolute_import
 from __future__ import division
-from __future__ import print_function
+from __future__ import #print_function
 
 import gzip
 
 import numpy
 from six.moves import xrange  # pylint: disable=redefined-builtin
 
-import baseModified as base
+from tensorflow.contrib.learn.python.learn.datasets import base
 from tensorflow.python.framework import dtypes
 from tensorflow.python.platform import gfile
 
@@ -38,7 +38,7 @@ def _read32(bytestream):
 
 def extract_images(filename):
   """Extract the images into a 4D uint8 numpy array [index, y, x, depth]."""
-  print('Extracting', filename)
+  #print('Extracting', filename)
   with gfile.Open(filename, 'rb') as f, gzip.GzipFile(fileobj=f) as bytestream:
     magic = _read32(bytestream)
     if magic != 2051:
@@ -64,7 +64,7 @@ def dense_to_one_hot(labels_dense, num_classes):
 
 def extract_labels(filename, one_hot=False, num_classes=10):
   """Extract the labels into a 1D uint8 numpy array [index]."""
-  print('Extracting', filename)
+  #print('Extracting', filename)
   with gfile.Open(filename, 'rb') as f, gzip.GzipFile(fileobj=f) as bytestream:
     magic = _read32(bytestream)
     if magic != 2049:

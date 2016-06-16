@@ -26,4 +26,5 @@ import numpy
 from six.moves import urllib
 from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
-from tensorflow.contrib.learn.python.learn.datasets.mnist import read_data_sets
+#from tensorflow.contrib.learn.python.learn.datasets.mnist import read_data_sets
+from getMNIST import read_data_sets

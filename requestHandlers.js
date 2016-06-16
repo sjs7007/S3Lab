@@ -68,9 +68,12 @@ function uploadCompleteScript(response,request) {
 		});
 
 		py.stdout.on('end', function(){
-			response.writeHead(200,{"Content-Type":"text/plain"});
-		    response.write(dataString);
-			response.end();
+			//response.writeHead(200,{"Content-Type":"text/plain"});
+		    //response.write(dataString);
+			//response.end();
+
+			 response.setHeader('Content-Type', 'application/json');
+   			 response.end(JSON.stringify({ Accuracy : dataString.substring(0,dataString.length-1) }));
 		});
 		py.stdin.write(JSON.stringify(data));
 		py.stdin.end();
@@ -118,11 +121,13 @@ function MNISTPredictor(response,request) {
 		});
 
 		py.stdout.on('end', function(){
-			response.writeHead(200,{"Content-Type":"text/html"});
+			//response.writeHead(200,{"Content-Type":"text/html"});
 			//var p1 = "<html> <img src="+files.upload.path+"> <br>";
-			var p2 = "Prediction is : "+dataString + "</html>";
-		    response.write(p2);
-			response.end();
+			//var p2 = "Prediction is : "+dataString + "</html>";
+		    //response.write(p2);
+			//response.end();
+			response.setHeader('Content-Type', 'application/json');
+   			response.end(JSON.stringify({ Prediction : dataString.substring(0,dataString.length-1) }));
 		});
 		py.stdin.write(JSON.stringify(data));
 		py.stdin.end();

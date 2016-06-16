@@ -8,27 +8,27 @@ import zipfile
 import sys, json
 import os
 
-#print(os.getcwd())
+##print(os.getcwd())
 #change directory to that of script
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
-#print(os.getcwd())
+##print(os.getcwd())
 
 lines = sys.stdin.readlines()
 lines = lines[0].replace("\\", "")
 lines = lines[1:len(lines)-1]
-#print lines
+##print lines
 
-#print "as"
-#print lines[0]
+##print "as"
+##print lines[0]
 #lines = '{"width":"28","height":"28","nClass":"10","alpha":"0.01"}'
 
 
 paramtersDict = json.loads(lines)
-#print paramtersDict
+##print paramtersDict
 
-#print paramtersDict
+##print paramtersDict
 
 zip_ref = zipfile.ZipFile("MNIST_data.zip", 'r')
 zip_ref.extractall()
@@ -36,18 +36,18 @@ zip_ref.close()
 
 
 mnist = input_data.read_data_sets("MNIST_data", one_hot=True)
-print "Loaded data."
+#print "Loaded data."
 
 import tensorflow as tf
 
 size = int(paramtersDict['width']) * int(paramtersDict['height'])
-print "Input Vector Length : ",size
+#print "Input Vector Length : ",size
 
 nClass = int(paramtersDict['nClass'])
-print "Number of Classes : ", nClass
+#print "Number of Classes : ", nClass
 
 alpha = float(paramtersDict['alpha'])
-print "Learning Rate : ", alpha
+#print "Learning Rate : ", alpha
 
 #nClass = 10
 #alpha = 0.01
@@ -71,4 +71,5 @@ for i in range(1000):
 
 correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-print "Accuracy", sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels})
+#print "Accuracy", sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels})
+print sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels})
