@@ -29,7 +29,7 @@ function MNISTPredictorPage(response) {
 	
 
 
-
+--
 function uploadCompleteScript(response,request) {
 	console.log("Request handler 'uploadCompleteScript' was called.");
 	var form = new formidable.IncomingForm();
@@ -63,7 +63,7 @@ function uploadCompleteScript(response,request) {
 		py.stdout.on('data', function(data){
 		  console.log("here1");
 		  console.log(data.toString());
-		  dataString += data.toString();
+		  dataString = data.toString();
 		});
 
 		console.log("here2");
@@ -71,7 +71,7 @@ function uploadCompleteScript(response,request) {
 		
 		py.stderr.on('data', function(data) {
 		  console.log('stdout: ' + data);
-		  dataString += data.toString();
+		  dataString = data.toString();
 		});
 
 		py.stdout.on('end', function(){
@@ -121,14 +121,14 @@ function MNISTPredictor(response,request) {
 		py.stdout.on('data', function(data){
 		  console.log("here1 : "+data);
 		  console.log(data.toString());
-		  dataString += data.toString();
+		  dataString = data.toString();
 		});
 
 		console.log("here2");
 
 		py.stderr.on('data', function(data) {
 		  console.log('stdout: ' + data);
-		  dataString += data.toString();
+		  dataString = data.toString();
 		});
 
 		py.stdout.on('end', function(){

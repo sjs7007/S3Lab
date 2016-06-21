@@ -1,0 +1,27 @@
+{
+  "name": "s3lab",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "formidable": "^1.0.17"
+  },
+  "engines": {
+      "node" : "0.10.25"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sjs7007/S3Lab.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sjs7007/S3Lab/issues"
+  },
+  "homepage": "https://github.com/sjs7007/S3Lab#readme"
+}
