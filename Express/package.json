@@ -1,27 +1,20 @@
 {
-  "name": "s3lab",
+  "name": "Express",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
   "dependencies": {
     "formidable": "^1.0.17"
-  },
-  "engines": {
-      "node" : "0.10.25"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sjs7007/S3Lab.git"
-  },
+  "keywords": [],
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/sjs7007/S3Lab/issues"
-  },
-  "homepage": "https://github.com/sjs7007/S3Lab#readme"
+  "license": "ISC"
 }
