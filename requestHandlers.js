@@ -1,5 +1,5 @@
 var querystring=require("querystring"),fs=require("fs"),formidable=require("formidable"),exec=require("child_process").exec;
-
+var modelID = 0;
 function start(response) {
 	console.log("Request handler 'start' was called.");
 
@@ -34,9 +34,12 @@ function uploadCompleteScript(response,request) {
 	console.log("Request handler 'uploadCompleteScript' was called.");
 	var form = new formidable.IncomingForm();
 	form.keepExtensions = true;
+	var fileName = "";
 
 	form.on('fileBegin', function(name, file) {
 		file.path = "./S3LabUploads/"+file.name;
+		fileName = file.name;
+		console.log("Model ID : "+ ++modelID);
     });
 
 
@@ -49,8 +52,12 @@ function uploadCompleteScript(response,request) {
 		console.log("File name : "+files.upload.path);
 
 		var spawn = require('child_process').spawn,
-		    py    = spawn('python', ['./newTest.py'], {cwd:"./S3LabUploads"}),
-		    data = JSON.stringify(fields) ;
+		    py    = spawn('python', ['./newTest.py'], {cwd:"./S3LabUploads"});
+
+		var jsonSend = fields;
+		jsonSend["File Name"]=noExtension(fileName);
+		data = JSON.stringify(jsonSend) ;
+		console.log("Sending : "+data);
 
 
 		py.stdout.on('data', function(data){
@@ -73,12 +80,16 @@ function uploadCompleteScript(response,request) {
 			//response.end();
 
 			 response.setHeader('Content-Type', 'application/json');
-   			 response.end(JSON.stringify({ Accuracy : dataString.substring(0,dataString.length-1) }));
+   			 response.end(JSON.stringify({ Accuracy : dataString.substring(0,dataString.length-1) , TrainedModel : noExtension(fileName)+"_"+modelID }));
 		});
 		py.stdin.write(JSON.stringify(data));
 		py.stdin.end();
 			});
 
+}
+
+function noExtension(fileName) {
+	return fileName.substring(0,fileName.indexOf("."));
 }
 
 function MNISTPredictor(response,request) {
@@ -127,7 +138,7 @@ function MNISTPredictor(response,request) {
 		    //response.write(p2);
 			//response.end();
 			response.setHeader('Content-Type', 'application/json');
-   			response.end(JSON.stringify({ Prediction : dataString.substring(0,dataString.length-1) }));
+   			response.end(JSON.stringify({ Prediction : dataString.substring(0,dataString.length-1)}));
 		});
 		py.stdin.write(JSON.stringify(data));
 		py.stdin.end();
