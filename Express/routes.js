@@ -49,8 +49,8 @@ router.post("/uploadCompleteScript",function (request,response) {
 
 	form.on('fileBegin', function(name, file) {
 		file.path = "./S3LabUploads/"+file.name;
-		fileName = file.name;
 		console.log("Model ID : "+ ++modelID);
+		fileName = noExtension(file.name);
     });
 
 	console.log("about to parse.");
@@ -64,7 +64,8 @@ router.post("/uploadCompleteScript",function (request,response) {
 		    py    = spawn('python', ['./newTest.py'], {cwd:"./S3LabUploads"});
 
 		var jsonSend = fields;
-		jsonSend["File Name"]=noExtension(fileName);
+		jsonSend["File Name"]=fileName;
+		jsonSend["modelID"]=modelID;
 		data = JSON.stringify(jsonSend) ;
 		console.log("Sending : "+data);
 
@@ -84,12 +85,8 @@ router.post("/uploadCompleteScript",function (request,response) {
 		});
 
 		py.stdout.on('end', function(){
-			//response.writeHead(200,{"Content-Type":"text/plain"});
-		    //response.write(dataString);
-			//response.end();
-
 			 response.setHeader('Content-Type', 'application/json');
-   			 response.end(JSON.stringify({ Accuracy : dataString.substring(0,dataString.length-1) , TrainedModel : "/S3LabUploads/"+noExtension(fileName)+"_"+modelID }));
+   			 response.end(JSON.stringify({ Accuracy : dataString.substring(0,dataString.length-1) , trainedModel : "/S3LabUploads/"+fileName+"_"+modelID+".ckpt" }));
 		});
 		py.stdin.write(JSON.stringify(data));
 		py.stdin.end();

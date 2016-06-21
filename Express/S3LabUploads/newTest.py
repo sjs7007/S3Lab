@@ -30,7 +30,7 @@ paramtersDict = json.loads(lines)
 
 ##print paramtersDict
 
-zip_ref = zipfile.ZipFile("MNIST_data.zip", 'r')
+zip_ref = zipfile.ZipFile(paramtersDict["File Name"]+".zip", 'r')
 zip_ref.extractall()
 zip_ref.close()
 
@@ -64,12 +64,17 @@ cross_entropy = -tf.reduce_sum(y_*tf.log(y))
 train_step = tf.train.GradientDescentOptimizer(alpha).minimize(cross_entropy)
 init = tf.initialize_all_variables()
 
+saver = tf.train.Saver()
+
+
 sess = tf.Session()
 sess.run(init)
 
 for i in range(1000):
   batch_xs, batch_ys = mnist.train.next_batch(100)
   sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
+
+saver.save(sess, paramtersDict["File Name"]+"_"+str(paramtersDict["modelID"])+".ckpt");
 
 correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
