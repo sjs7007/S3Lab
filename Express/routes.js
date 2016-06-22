@@ -103,14 +103,14 @@ router.post("/generalPredictorImageUpload", function(request,response) {
 		py.stdout.on('data', function(data){
 		  console.log("here1 : "+data);
 		  console.log(data.toString());
-		  dataString += data.toString();
+		  dataString = data.toString();
 		});
 
 		console.log("here2");
 
 		py.stderr.on('data', function(data) {
 		  console.log('stdout: ' + data);
-		  dataString += data.toString();
+		  dataString = data.toString();
 		});
 
 		py.stdout.on('end', function(){
@@ -163,7 +163,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 		py.stdout.on('data', function(data){
 		  console.log("here1");
 		  console.log(data.toString());
-		  dataString += data.toString();
+		  dataString = data.toString();
 		});
 
 		console.log("here2");
@@ -171,7 +171,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 		
 		py.stderr.on('data', function(data) {
 		  console.log('stdout: ' + data);
-		  dataString += data.toString();
+		  dataString = data.toString();
 		});
 
 		py.stdout.on('end', function(){
@@ -218,14 +218,14 @@ router.post("/MNISTPredictor", function(request,response) {
 		py.stdout.on('data', function(data){
 		  console.log("here1 : "+data);
 		  console.log(data.toString());
-		  dataString += data.toString();
+		  dataString = data.toString();
 		});
 
 		console.log("here2");
 
 		py.stderr.on('data', function(data) {
 		  console.log('stdout: ' + data);
-		  dataString += data.toString();
+		  dataString = data.toString();
 		});
 
 		py.stdout.on('end', function(){

@@ -7,7 +7,7 @@ var app = express();
 app.use('/', routes);
 
 
-app.use("/S3LabUploads",express.static('/home/shinchan/S3Lab/Express/S3LabUploads/'));
+app.use("/S3LabUploads",express.static('S3LabUploads'));
 
 app.listen(8888, function () {
   console.log('App listening on port 8888!');
