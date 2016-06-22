@@ -3,9 +3,11 @@
 var express = require('express');
 var routes = require('./routes');
 var app = express();
+var cors = require('cors');
+
+app.use(cors({origin: true}));
 
 app.use('/', routes);
-
 
 app.use("/S3LabUploads",express.static('S3LabUploads'));
 
