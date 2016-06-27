@@ -1,4 +1,3 @@
-
 var fs = require("fs");
 var express = require('express');
 var router = express.Router();
@@ -7,10 +6,10 @@ var path= require("path");
 var http = require('http');
 var modelID = 0;
 var util = require('util');
+var uuid = require('node-uuid');
+var cassandra = require('cassandra-driver');
+var client = new cassandra.Client({contactPoints: ['127.0.0.1:9042']});
 
-
-
-// middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
   console.log('Time: ', Date.now());
   next();
@@ -153,10 +152,21 @@ router.post("/uploadCompleteScript",function (request,response) {
 		console.log("parsing done.");
 		console.log("File name : "+files.upload.path);
 
+		var hasCrashed = false;
 		var spawn = require('child_process').spawn,
 		    py    = spawn('python', ['./newTest.py'], {cwd:"./S3LabUploads"});
+		var UUID = uuid.v4();
+		console.log("Process started with PID : "+py.pid+" and title "+py.title+"\n");
+		py.title= 'trainingJob'+UUID;
 
-		var jsonSend = fields;
+
+		var query = "INSERT INTO dummyDB.jobInfo (user_id,job_id,jobStatus,jobType,pid) VALUES ('sjs7007testing',"+UUID+",'live','training','"+py.pid+"')";   
+		client.execute(query, function(err, result) {
+		  console.log(err);
+		});
+
+
+        var jsonSend = fields;
 		jsonSend["File Name"]=fileName;
 		jsonSend["modelID"]=modelID;
 		data = JSON.stringify(jsonSend) ;
@@ -173,13 +183,25 @@ router.post("/uploadCompleteScript",function (request,response) {
 
 		
 		py.stderr.on('data', function(data) {
+		  hasCrashed = true;
 		  console.log('stdout: ' + data);
 		  dataString = data.toString();
 		});
 
 		py.stdout.on('end', function(){
-			 response.setHeader('Content-Type', 'application/json');
-   			 response.end(JSON.stringify({ Accuracy : dataString.substring(0,dataString.length-1) , trainedModel : "/S3LabUploads/"+fileName+"_"+modelID+".ckpt" }));
+			var modelPath = "/S3LabUploads/"+fileName+"_"+modelID+".ckpt";
+			var accuracyValue = "dummyForNow";
+			if(!hasCrashed) {
+				var query = "UPDATE dummyDB.jobInfo SET jobStatus='finished',pid='null',accuracy='"+accuracyValue+"' ,model='"+modelPath+"' WHERE job_id="+UUID;
+				client.execute(query, function(err, result) {
+				console.log(err);
+				});
+			}
+			else {
+
+			}
+			response.setHeader('Content-Type', 'application/json');
+   			response.end(JSON.stringify({ Accuracy : accuracyValue  , trainedModel : modelPath }));
 		});
 		py.stdin.write(JSON.stringify(data));
 		py.stdin.end();
@@ -248,3 +270,4 @@ router.post("/MNISTPredictor", function(request,response) {
 
 
 module.exports = router;
+

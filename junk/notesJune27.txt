@@ -1,0 +1,72 @@
+CREATE KEYSPACE IF NOT EXISTS test WITH REPLICATION = { 'class': 'SimpleStrategy','replication_factor': 1 };
+
+CREATE TABLE IF NOT EXISTS test.testing (user_id UUID, user_name text, PRIMARY KEY(user_id));
+
+alter table test.testing add just text;   
+
+INSERT INTO test.testing (user_id, user_name ) VALUES (756716f7-2e54-4715-9f00-91dcbea6cf51, 'ABC');
+
+INSERT INTO test.testing (user_id, user_name ) VALUES (756716f7-2e54-4715-9f00-91dcbea6cf50, 'ABCw');
+
+UPDATE test.testing SET user_name='new2',just='justtes' WHERE user_id=756716f7-2e54-4715-9f00-91dcbea6cf51;
+
+var cassandra = require('cassandra-driver');
+var client = new cassandra.Client({contactPoints: ['127.0.0.1:9042']});
+var query = 'SELECT * from test.testing';
+
+client.execute(query, function(err, result) {
+  console.log('got user profile with email ' + result.rows[0].user_id);
+});
+
+-----
+
+CREATE KEYSPACE IF NOT EXISTS dummyDB WITH REPLICATION = { 'class': 'SimpleStrategy','replication_factor': 1 };
+
+
+CREATE TABLE dummyDB.jobInfo (user_id text, job_id UUID, model text, jobStatus text, jobType text, accuracy text, prediction text, PRIMARY KEY(job_id)); 
+
+INSERT INTO dummyDB.jobInfo (user_id,job_id,model,jobStatus,jobType,accuracy,prediction) VALUES ('sjs7007',756716f7-2e54-4715-9f00-91dcbea6cf50,null,'live','test',null,null);
+
+ALTER TABLE dummyDB.jobInfo ADD pid text;
+
+SELECT * FROM dummyDB.jobInfo WHERE user_id='m019' ALLOW FILTERING
+
+ UPDATE dummyDB.jobInfo SET jobStatus='done' WHERE job_id=756716f7-2e54-4715-9f00-91dcbea6cf50;
+
+http://stackoverflow.com/questions/20187184/how-to-kill-childprocess-in-nodejs
+
+https://github.com/broofa/node-uuid
+
+https://www.npmjs.com/package/hashmap
+
+http://stackoverflow.com/questions/15471555/nodejs-process-info
+
+1. generate uuids for child process, track it by storing in hashmap of jobid -> process
+2. create job function -> generated uuid, enter process in db with live status, enter process in hashmap, start the process
+3. kill job -> remove from hashmap, change job status to killed in db, actually kill job
+4. job crashes -> error code received, change job status to crashed, remove from hashmap
+5. job finishes -> success code received, changed job status to finished, remove from hashmap, store model
+
+
+6. Get all jobs with specific username. 
+
+Make code more modular if possible. 
+
+If job crashes.. how to get job_id? Store before somewhere
+
+use process id instead... stored in db after process created. 
+
+var cassandra = require('cassandra-driver');
+var client = new cassandra.Client({contactPoints: ['127.0.0.1:9042']});
+var uuid = require('node-uuid');
+UUID = uuid.v4();
+pid="100";
+
+var query = "INSERT INTO dummyDB.jobInfo (user_id,job_id,jobStatus,jobType,pid) VALUES ('sjs7007testing',"+UUID+",'live','training','"+pid+"')";   
+
+
+client.execute(query, function(err, result) {
+  console.log(err);
+});
+
+UPDATE dummyDB.jobInfo SET 
