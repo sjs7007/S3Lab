@@ -8,7 +8,7 @@ INSERT INTO test.testing (user_id, user_name ) VALUES (756716f7-2e54-4715-9f00-9
 
 INSERT INTO test.testing (user_id, user_name ) VALUES (756716f7-2e54-4715-9f00-91dcbea6cf50, 'ABCw');
 
-UPDATE test.testing SET user_name='new' WHERE user_id=756716f7-2e54-4715-9f00-91dcbea6cf51;
+UPDATE test.testing SET user_name='new2',just='justtes' WHERE user_id=756716f7-2e54-4715-9f00-91dcbea6cf51;
 
 var cassandra = require('cassandra-driver');
 var client = new cassandra.Client({contactPoints: ['127.0.0.1:9042']});
@@ -46,7 +46,8 @@ http://stackoverflow.com/questions/15471555/nodejs-process-info
 3. kill job -> remove from hashmap, change job status to killed in db, actually kill job
 4. job crashes -> error code received, change job status to crashed, remove from hashmap
 5. job finishes -> success code received, changed job status to finished, remove from hashmap, store model
-
+5.5 in case of server crash : or in general in start... set all live processess(if any) to crashed state.
+it seems child processess get killed with parent process
 
 6. Get all jobs with specific username. 
 
@@ -69,4 +70,16 @@ client.execute(query, function(err, result) {
   console.log(err);
 });
 
-UPDATE dummyDB.jobInfo SET 
+ UPDATE dummyDB.jobInfo SET jobstatus='crashed',pid='processCrashed' WHERE jobstatus='live';
+
+select job_id from dummyDB.jobInfo  WHERE jobstatus='live' ALLOW FILTERING;       
+
+ UPDATE dummyDB.jobInfo SET jobstatus='crashed',pid='processCrashed' WHERE job_id IN (SELECT job_id FROM dummyDB.jobInfo  WHERE jobstatus='live' ALLOW FILTERING) ;    
+
+var query = " SELECT job_id FROM dummyDB.jobInfo  WHERE jobstatus='live' ALLOW FILTERING;"
+
+client.execute(query, function(err, result) {
+  console.log('got jobid ' + result.rows[0].job_id+ " "+result.rows.length);
+});
+                
+

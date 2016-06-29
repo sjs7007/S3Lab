@@ -1,0 +1,1 @@
+ UPDATE dummyDB.jobInfo SET jobstatus='crashed',pid='processCrashed' WHERE jobstatus='live';

@@ -1,7 +1,7 @@
 {
-  "name": "Express",
+  "name": "exp",
   "version": "1.0.0",
-  "description": "",
+  "description": "**1. MNIST Trainer** ---- Allows user to upload the [MNIST dataset](https://drive.google.com/open?id=0B-HwpreJA3WzbnZodkJZVWNfUTg) and get a trained model based on the parameters specified. Description about the dataset can be found [here](http://yann.lecun.com/exdb/mnist/).",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -18,5 +18,13 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sjs7007/S3Lab.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sjs7007/S3Lab/issues"
+  },
+  "homepage": "https://github.com/sjs7007/S3Lab#readme"
 }
