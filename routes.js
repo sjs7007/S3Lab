@@ -46,12 +46,33 @@ function onJobCreationDB(UUID,pid) {
 	client.execute(query, function(err, result) {
 	  console.log(err);
 	});
-};	
+}
 
 function onProcessKillDB(pid) {
 	processIDSet.remove(pid);
 	//add code to update db later
 }
+
+///http://stackoverflow.com/questions/23339907/returning-a-value-from-callback-function-in-node-js
+function dashboardPullDB(callback) {
+	var query = "SELECT jobstatus,jobtype,model,prediction,user_id,pid FROM dummyDb.jobInfo;";
+	client.execute(query,function(err,result) {
+		if(err) {
+			console.log(err);
+		}
+		else {
+			//console.log(result);
+			//console.log("---> "+result.rows[0]);
+			return callback(result);
+		}
+	});
+}
+
+
+/*dashboardPullDB(function(result) {
+	console.log("result : "+JSON.stringify(result));
+});*/
+
 
 //Other helper functions 
 
@@ -59,9 +80,6 @@ function onProcessKillDB(pid) {
 function noExtension(fileName) {
 	return fileName.substring(0,fileName.indexOf("."));
 }
-
-//check if process was created by node script first 
-// store in hashset when created, remove when done or exits
 
 // Runs for all routes 
 router.use(function timeLog(req, res, next) {
@@ -404,6 +422,17 @@ router.post("/killProcess",function(request,response) {
 		
 	});
 });
+
+// 6. Get dashboard
+
+router.get("/getDashboard",function(request,response) {
+	dashboardPullDB(function(result) {
+		console.log("result : "+JSON.stringify(result));
+		response.setHeader('Content-Type', 'application/json');
+   		response.end(JSON.stringify(result));
+	});
+});
+
 
 module.exports = router;
 
