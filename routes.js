@@ -55,7 +55,7 @@ function onProcessKillDB(pid) {
 
 ///http://stackoverflow.com/questions/23339907/returning-a-value-from-callback-function-in-node-js
 function dashboardPullDB(callback) {
-	var query = "SELECT jobstatus,jobtype,model,prediction,user_id,pid FROM dummyDb.jobInfo;";
+	var query = "SELECT jobstatus,jobtype,model,prediction,user_id FROM dummyDb.jobInfo;";
 	client.execute(query,function(err,result) {
 		if(err) {
 			console.log(err);
