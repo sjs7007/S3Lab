@@ -55,7 +55,7 @@ function onProcessKillDB(pid) {
 
 ///http://stackoverflow.com/questions/23339907/returning-a-value-from-callback-function-in-node-js
 function dashboardPullDB(callback) {
-	var query = "SELECT jobstatus,jobtype,model,prediction,user_id FROM dummyDb.jobInfo;";
+	var query = "SELECT pid,job_id,jobstatus,jobtype,model,prediction,user_id FROM dummyDb.jobInfo;";
 	client.execute(query,function(err,result) {
 		if(err) {
 			console.log(err);
@@ -68,6 +68,19 @@ function dashboardPullDB(callback) {
 	});
 }
 
+function dashboardPullDBSelective(callback,user_id) {
+	var query = "SELECT pid,job_id,jobstatus,jobtype,model,prediction,user_id FROM dummyDb.jobInfo WHERE user_id='"+user_id+"' ALLOW FILTERING;";
+	client.execute(query,function(err,result) {
+		if(err) {
+			console.log(err);
+		}
+		else {
+			//console.log(result);
+			//console.log("---> "+result.rows[0]);
+			return callback(result);
+		}
+	});
+}
 
 /*dashboardPullDB(function(result) {
 	console.log("result : "+JSON.stringify(result));
@@ -423,7 +436,7 @@ router.post("/killProcess",function(request,response) {
 	});
 });
 
-// 6. Get dashboard
+// 6. Get dashboard for all users
 
 router.get("/getDashboard",function(request,response) {
 	dashboardPullDB(function(result) {
@@ -432,6 +445,17 @@ router.get("/getDashboard",function(request,response) {
    		response.end(JSON.stringify(result));
 	});
 });
+
+// 7. Get Dashboard selective : i.e. info about specific user 
+
+router.get("/getDashboardSelective",function(request,response) {
+	dashboardPullDBSelective(function(result) {
+		console.log("result : "+JSON.stringify(result));
+		response.setHeader('Content-Type', 'application/json');
+   		response.end(JSON.stringify(result));
+	},request.query.user_id);
+});
+
 
 
 module.exports = router;

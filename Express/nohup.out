@@ -1,0 +1,402 @@
+App listening on port 8888!
+Time:  1466554193765
+Homepage requested.
+Time:  1466554201321
+Homepage requested.
+Time:  1466554207710
+Homepage requested.
+Time:  1466554209548
+Request handler 'MNISTPredictorPage' was called.
+Time:  1466554212041
+Request handler 'generalPredictorPage' was called.
+Time:  1466554472681
+Request handler 'generalPredictorPage' was called.
+App listening on port 8888!
+Time:  1466554574037
+Homepage requested.
+Time:  1466554656209
+Homepage requested.
+Time:  1466554971883
+Homepage requested.
+Time:  1466554995901
+Homepage requested.
+Time:  1466554996661
+Time:  1466555002078
+Request handler 'MNISTPredictorPage' was called.
+Time:  1466555012391
+Request handler 'MNISTPredictor' was called.
+about to parse.
+parsing done.
+File name : ./MNISTPredictor/0 to 99 2.JPG
+here2
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcublas.so locally
+
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcudnn.so locally
+
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcufft.so locally
+
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcuda.so locally
+
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcurand.so locally
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:102] Found device 0 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:05:00.0
+Total memory: 11.25GiB
+Free memory: 11.07GiB
+
+stdout: W tensorflow/stream_executor/cuda/cuda_driver.cc:572] creating context when one is currently active; existing: 0x2b7e650
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:102] Found device 1 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:06:00.0
+Total memory: 11.25GiB
+Free memory: 11.13GiB
+
+stdout: W tensorflow/stream_executor/cuda/cuda_driver.cc:572] creating context when one is currently active; existing: 0x2f97270
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:102] Found device 2 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:84:00.0
+Total memory: 11.25GiB
+Free memory: 11.13GiB
+
+stdout: W tensorflow/stream_executor/cuda/cuda_driver.cc:572] creating context when one is currently active; existing: 0x33aee70
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:102] Found device 3 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:85:00.0
+Total memory: 11.25GiB
+Free memory: 11.13GiB
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 0 to device ordinal 2
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 0 to device ordinal 3
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 1 to device ordinal 2
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 1 to device ordinal 3
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 2 to device ordinal 0
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 2 to device ordinal 1
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 3 to device ordinal 0
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 3 to device ordinal 1
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:126] DMA: 0 1 2 3 
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:136] 0:   Y Y N N 
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:136] 1:   Y Y N N 
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:136] 2:   N N Y Y 
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:136] 3:   N N Y Y 
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_device.cc:806] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K80, pci bus id: 0000:05:00.0)
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:806] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K80, pci bus id: 0000:06:00.0)
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:806] Creating TensorFlow device (/gpu:2) -> (device: 2, name: Tesla K80, pci bus id: 0000:84:00.0)
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:806] Creating TensorFlow device (/gpu:3) -> (device: 3, name: Tesla K80, pci bus id: 0000:85:00.0)
+
+stdout: Traceback (most recent call last):
+  File "./predictSavedModel.py", line 36, in <module>
+    saver.restore(sess, "mnist.ckpt") 
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/training/saver.py", line 1105, in restore
+
+stdout:     {self.saver_def.filename_tensor_name: save_path})
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 372, in run
+
+stdout:     run_metadata_ptr)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 636, in _run
+
+stdout:     feed_dict_string, options, run_metadata)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 708, in _do_run
+
+stdout:     target_list, options, run_metadata)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/client/session.py", line 728, in _do_call
+
+stdout:     raise type(e)(node_def, op, message)
+
+stdout: tensorflow.python.framework.errors.InvalidArgumentError
+stdout: : Assign requires shapes of both tensors to match. lhs shape= [119140,10] rhs shape= [784,10]
+	 [[Node: save/Assign = Assign[T=DT_FLOAT, _class=["loc:@Variable"], use_locking=true, validate_shape=true, _device="/job:localhost/replica:0/task:0/gpu:0"](Variable, save/restore_slice/_5)]]
+Caused by op u'save/Assign', defined at:
+  File "./predictSavedModel.py", line 31, in <module>
+    saver = tf.train.Saver()
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/training/saver.py", line 845, in __init__
+    restore_sequentially=restore_sequentially)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/training/saver.py", line 515, in build
+    filename_tensor, vars_to_save, restore_sequentially, reshape)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/training/saver.py", line 281, in _AddRestoreOps
+    validate_shape=validate_shape))
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/ops/gen_state_ops.py", line 45, in assign
+    use_locking=use_locking, name=name)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/ops/op_def_library.py", line 704, in apply_op
+    op_def=op_def)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/framework/ops.py", line 2260, in create_op
+    original_op=self._default_original_op, op_def=op_def)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/framework/ops.py", line 1230, in __init__
+    self._traceback = _extract_stack()
+
+
+Time:  1466555174912
+Request handler 'uploadCompleteScript' was called.
+about to parse.
+Model ID : 1
+parsing done.
+File name : ./S3LabUploads/MNIST_data.zip
+Sending : {"width":"28","height":"28","nClass":"10","alpha":"0.01","File Name":"MNIST_data","modelID":1}
+here2
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcublas.so locally
+
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcudnn.so locally
+
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcufft.so locally
+
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcuda.so locally
+
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcurand.so locally
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:102] Found device 0 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:05:00.0
+Total memory: 11.25GiB
+Free memory: 11.07GiB
+
+stdout: W tensorflow/stream_executor/cuda/cuda_driver.cc:572] creating context when one is currently active; existing: 0x493bed0
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:102] Found device 1 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:06:00.0
+Total memory: 11.25GiB
+Free memory: 11.13GiB
+
+stdout: W tensorflow/stream_executor/cuda/cuda_driver.cc:572] creating context when one is currently active; existing: 0x4d54cb0
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:102] Found device 2 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:84:00.0
+Total memory: 11.25GiB
+Free memory: 11.13GiB
+
+stdout: W tensorflow/stream_executor/cuda/cuda_driver.cc:572] creating context when one is currently active; existing: 0x516c970
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:102] Found device 3 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:85:00.0
+Total memory: 11.25GiB
+Free memory: 11.13GiB
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 0 to device ordinal 2
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 0 to device ordinal 3
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 1 to device ordinal 2
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 1 to device ordinal 3
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 2 to device ordinal 0
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 2 to device ordinal 1
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 3 to device ordinal 0
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 3 to device ordinal 1
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:126] DMA: 0 1 2 3 
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:136] 0:   Y Y N N 
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:136] 1:   Y Y N N 
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:136] 2:   N N Y Y 
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:136] 3:   N N Y Y 
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_device.cc:806] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K80, pci bus id: 0000:05:00.0)
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:806] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K80, pci bus id: 0000:06:00.0)
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:806] Creating TensorFlow device (/gpu:2) -> (device: 2, name: Tesla K80, pci bus id: 0000:84:00.0)
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:806] Creating TensorFlow device (/gpu:3) -> (device: 3, name: Tesla K80, pci bus id: 0000:85:00.0)
+
+here1
+0.9144
+
+Time:  1466565427925
+Homepage requested.
+Time:  1466565428173
+Time:  1466565681892
+Homepage requested.
+Time:  1466565686294
+Request handler 'MNISTPredictorPage' was called.
+Time:  1466565690255
+Request handler 'generalPredictorPage' was called.
+Time:  1466565692550
+Request handler 'generalPredictorPage' was called.
+Time:  1466572078510
+Homepage requested.
+Time:  1466572078637
+Time:  1466578337046
+Time:  1466625748526
+Homepage requested.
+Time:  1466631881952
+Request handler 'uploadCompleteScript' was called.
+about to parse.
+Model ID : 2
+parsing done.
+File name : ./S3LabUploads/MNIST_data.zip
+Sending : {"width":"28","height":"28","nClass":"10","alpha":"0.01","File Name":"MNIST_data","modelID":2}
+here2
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcublas.so locally
+
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcudnn.so locally
+
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcufft.so locally
+
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcuda.so locally
+
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcurand.so locally
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:102] Found device 0 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:05:00.0
+Total memory: 11.25GiB
+Free memory: 11.07GiB
+
+stdout: W tensorflow/stream_executor/cuda/cuda_driver.cc:572] creating context when one is currently active; existing: 0x353b070
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:102] Found device 1 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:06:00.0
+Total memory: 11.25GiB
+Free memory: 11.13GiB
+
+stdout: W tensorflow/stream_executor/cuda/cuda_driver.cc:572] creating context when one is currently active; existing: 0x3953b20
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:102] Found device 2 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:84:00.0
+Total memory: 11.25GiB
+Free memory: 11.13GiB
+
+stdout: W tensorflow/stream_executor/cuda/cuda_driver.cc:572] creating context when one is currently active; existing: 0x3d6b7e0
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:102] Found device 3 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:85:00.0
+Total memory: 11.25GiB
+Free memory: 11.13GiB
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 0 to device ordinal 2
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 0 to device ordinal 3
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 1 to device ordinal 2
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 1 to device ordinal 3
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 2 to device ordinal 0
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 2 to device ordinal 1
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 3 to device ordinal 0
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 3 to device ordinal 1
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:126] DMA: 0 1 2 3 
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:136] 0:   Y Y N N 
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:136] 1:   Y Y N N 
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:136] 2:   N N Y Y 
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:136] 3:   N N Y Y 
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:806] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K80, pci bus id: 0000:05:00.0)
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:806] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K80, pci bus id: 0000:06:00.0)
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:806] Creating TensorFlow device (/gpu:2) -> (device: 2, name: Tesla K80, pci bus id: 0000:84:00.0)
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:806] Creating TensorFlow device (/gpu:3) -> (device: 3, name: Tesla K80, pci bus id: 0000:85:00.0)
+
+here1
+0.9205
+
+Time:  1466632410057
+Homepage requested.
+Time:  1466632410823
+Time:  1466632416451
+Request handler 'generalPredictorPage' was called.
+Time:  1466632420361
+Request handler 'generalPredictorPage' was called.
+Time:  1466644404627
+Homepage requested.
+Time:  1466644404728
+Time:  1466645225956
+Homepage requested.
+Time:  1466652905070
+Homepage requested.
+Time:  1466661909096
+Request handler 'uploadCompleteScript' was called.
+about to parse.
+Model ID : 3
+parsing done.
+File name : ./S3LabUploads/MNIST_data.zip
+Sending : {"width":"28","height":"28","nClass":"10","alpha":"0.01","File Name":"MNIST_data","modelID":3}
+here2
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcublas.so locally
+
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcudnn.so locally
+
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcufft.so locally
+
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcuda.so locally
+
+stdout: I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcurand.so locally
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:102] Found device 0 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:05:00.0
+Total memory: 11.25GiB
+Free memory: 11.07GiB
+
+stdout: W tensorflow/stream_executor/cuda/cuda_driver.cc:572] creating context when one is currently active; existing: 0x2d1e040
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:102] Found device 1 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:06:00.0
+Total memory: 11.25GiB
+Free memory: 11.13GiB
+
+stdout: W tensorflow/stream_executor/cuda/cuda_driver.cc:572] creating context when one is currently active; existing: 0x3136ec0
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:102] Found device 2 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:84:00.0
+Total memory: 11.25GiB
+Free memory: 11.13GiB
+
+stdout: W tensorflow/stream_executor/cuda/cuda_driver.cc:572] creating context when one is currently active; existing: 0x354ea60
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:102] Found device 3 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:85:00.0
+Total memory: 11.25GiB
+Free memory: 11.13GiB
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 0 to device ordinal 2
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 0 to device ordinal 3
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 1 to device ordinal 2
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 1 to device ordinal 3
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 2 to device ordinal 0
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 2 to device ordinal 1
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 3 to device ordinal 0
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:59] cannot enable peer access from device ordinal 3 to device ordinal 1
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_init.cc:126] DMA: 0 1 2 3 
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:136] 0:   Y Y N N 
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:136] 1:   Y Y N N 
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:136] 2:   N N Y Y 
+I tensorflow/core/common_runtime/gpu/gpu_init.cc:136] 3:   N N Y Y 
+
+stdout: I tensorflow/core/common_runtime/gpu/gpu_device.cc:806] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K80, pci bus id: 0000:05:00.0)
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:806] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K80, pci bus id: 0000:06:00.0)
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:806] Creating TensorFlow device (/gpu:2) -> (device: 2, name: Tesla K80, pci bus id: 0000:84:00.0)
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:806] Creating TensorFlow device (/gpu:3) -> (device: 3, name: Tesla K80, pci bus id: 0000:85:00.0)
+
+here1
+0.9135
+
+Time:  1466676519535
+Request handler for generalPredictorModelUpload called
+Time:  1466676520746
+Request handler for generalPredictorModelUpload called
+Time:  1466688234189
+Homepage requested.
+Time:  1466688234368
