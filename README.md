@@ -189,6 +189,10 @@ Allows user to get information about jobs submitted by specific user to the syst
   
    `GET` 
 
+*  **URL Params**
+
+   user_id : user_id whose jobs you want to manage. 
+
 * **Success Response:**
 
   * **Code:** 200 <br />
