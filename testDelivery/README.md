@@ -1,24 +1,4 @@
-Send Files : https://www.npmjs.com/package/delivery
-
-Using socket client on server side : http://stackoverflow.com/questions/22279922/file-data-transfer-between-two-node-js-servers
-
-Fixing error on receiver side : https://github.com/liamks/Delivery.js/issues/22
-
-"Found solution for this problem. Just need to add the following code after attempting to send the images once on sender node server.
-
-socket.disconnect();
-socket.connect();"
-
-Send Files : https://www.npmjs.com/package/delivery
-
-Using socket client on server side : http://stackoverflow.com/questions/22279922/file-data-transfer-between-two-node-js-servers
-
-Fixing error on receiver side : https://github.com/liamks/Delivery.js/issues/22
-
-"Found solution for this problem. Just need to add the following code after attempting to send the images once on sender node server.
-
-socket.disconnect();
-socket.connect();"
+Start the receiver server and then run the sender server file. sample-image.jpg will be sent and stored as testName. 
 
 Code on sender server 
 ```
@@ -75,3 +55,25 @@ io.sockets.on('connection', function(socket){
 });
 
 ```
+
+Send Files : https://www.npmjs.com/package/delivery
+
+Using socket client on server side : http://stackoverflow.com/questions/22279922/file-data-transfer-between-two-node-js-servers
+
+Fixing error on receiver side : https://github.com/liamks/Delivery.js/issues/22
+
+"Found solution for this problem. Just need to add the following code after attempting to send the images once on sender node server.
+
+socket.disconnect();
+socket.connect();"
+
+Send Files : https://www.npmjs.com/package/delivery
+
+Using socket client on server side : http://stackoverflow.com/questions/22279922/file-data-transfer-between-two-node-js-servers
+
+Fixing error on receiver side : https://github.com/liamks/Delivery.js/issues/22
+
+"Found solution for this problem. Just need to add the following code after attempting to send the images once on sender node server.
+
+socket.disconnect();
+socket.connect();"
