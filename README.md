@@ -170,12 +170,50 @@ Allows user to get information about jobs submitted to the system and their stat
     Job type : training/testing    
     Prediction : in case of a testing job, else null   
     User_id : user who submitted the job    
+    job_id : unique job id
+    pid : process id assigned to job 
 
 * **Sample Call:**
 
   `curl deepc02.acis.ufl.edu:8888/getDashboard`
 
-**5. Kill Jobs**
+**5. Dashbord Information : Specific**
+----
+Allows user to get information about jobs submitted by specific user to the system and their status. 
+
+* **URL**
+
+ /getDashboardSelective
+
+* **Method:**
+  
+   `GET` 
+
+*  **URL Params**
+
+   user_id : user_id whose jobs you want to manage. 
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{"info":{"queriedHost":"127.0.0.1:9042","triedHosts":{},"achievedConsistency":10},"rows":[],"rowLength":0,"columns":[{"name":"pid","type":{"code":13,"type":null}},{"name":"job_id","type":{"code":12,"type":null}},{"name":"jobstatus","type":{"code":13,"type":null}},{"name":"jobtype","type":{"code":13,"type":null}},{"name":"model","type":{"code":13,"type":null}},{"name":"prediction","type":{"code":13,"type":null}},{"name":"user_id","type":{"code":13,"type":null}}],"pageState":null}`
+
+    Result returned contains an array of json consisting of following information :   
+
+    Job status : finished/crashed    
+    Job type : training/testing    
+    Prediction : in case of a testing job, else null   
+    User_id : user who submitted the job    
+    job_id : unique job id
+    pid : process id assigned to job 
+
+* **Sample Call:**
+
+  `curl deepc02.acis.ufl.edu:8888/getDashboardSelective?user_id=sjs7007`
+
+
+
+**6. Kill Jobs**
 ----
 Allows user to kill training jobs with specific pid. 
 

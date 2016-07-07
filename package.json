@@ -9,7 +9,8 @@
   "dependencies": {
     "cors": "^2.7.1",
     "express": "^4.14.0",
-    "formidable": "^1.0.17"
+    "formidable": "^1.0.17",
+    "hashset": "^3.7.3"
   },
   "devDependencies": {},
   "scripts": {
@@ -18,7 +19,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "BSD-2-Clause",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sjs7007/S3Lab.git"
