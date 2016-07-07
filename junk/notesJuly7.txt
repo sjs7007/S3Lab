@@ -1,0 +1,3 @@
+https://www.npmjs.com/package/delivery
+
+http://stackoverflow.com/questions/22279922/file-data-transfer-between-two-node-js-servers

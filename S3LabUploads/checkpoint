@@ -1,2 +1,2 @@
-model_checkpoint_path: "MNIST_data_00daab11-4c20-4863-9698-6549c611bb00.ckpt"
-all_model_checkpoint_paths: "MNIST_data_00daab11-4c20-4863-9698-6549c611bb00.ckpt"
+model_checkpoint_path: "MNIST_data_d6058700-35d8-47c3-82ff-f35c68491277.ckpt"
+all_model_checkpoint_paths: "MNIST_data_d6058700-35d8-47c3-82ff-f35c68491277.ckpt"
