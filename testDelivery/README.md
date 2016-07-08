@@ -77,3 +77,6 @@ Fixing error on receiver side : https://github.com/liamks/Delivery.js/issues/22
 
 socket.disconnect();
 socket.connect();"
+
+
+Send messages : http://stackoverflow.com/questions/11498508/socket-emit-vs-socket-send

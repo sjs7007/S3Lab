@@ -3,7 +3,11 @@ var io  = require('socket.io').listen(5002),
     fs  = require('fs');
 
 io.sockets.on('connection', function(socket){
-  
+
+  socket.on('testSocket', function(data) {
+    console.log("Data received on socket : "+data);
+  });
+
   var delivery = dl.listen(socket);
   delivery.on('receive.success',function(file){
 		

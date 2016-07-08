@@ -6,6 +6,8 @@ var socket = io.connect('http://0.0.0.0:5002');
 
 socket.on( 'connect', function() {
   console.log( "Sockets connected" );
+
+  socket.emit('testSocket',"testing sockets in node.js");
 		
   delivery = dl.listen( socket );
   delivery.connect();
@@ -25,4 +27,5 @@ socket.on( 'connect', function() {
   });
 	
 });
+
 
