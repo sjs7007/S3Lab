@@ -18,14 +18,15 @@ var processIDSet = new HashSet.int32();
 //Database functions
 // In case app restarts after a crash, set status of all live jobs to crashed 
 // since the child process
+// use Prepared statements : http://datastax.github.io/nodejs-driver/getting-started/
 function onDatabaseStart() {
 	console.log("Clearing up Database...");
 	var query = " SELECT job_id FROM dummyDB.jobInfo  WHERE jobstatus='live' ALLOW FILTERING;";
-	client.execute(query,function(err,result) {
+	client.execute(query, { prepare: true },function(err,result) {
 		for(var i=0;i<result.rows.length;i++) {
-			var query2= "UPDATE dummyDB.jobInfo SET jobstatus='crashed',pid='processCrashed' WHERE job_id="+result.rows[i].job_id; 
-			client.execute(query2,function(err2,result2) {
-				console.log(err2);
+			var query2= "UPDATE dummyDB.jobInfo SET jobstatus='crashed',pid='processCrashed' WHERE job_id=?;"; 
+			client.execute(query2,[result.rows[i].job_id],  { prepare: true },function(err2,result2) {
+				console.log("onDatabaseStart Error : "+err2);
 			});
 		}
 	});
@@ -33,18 +34,18 @@ function onDatabaseStart() {
 
 function onProcessSucessDB(accuracyValue,modelPath, UUID, pid) {
 	processIDSet.remove(pid);
-	var query = "UPDATE dummyDB.jobInfo SET jobStatus='finished',pid='processFinished',accuracy='"+accuracyValue+"' ,model='"+modelPath+"' WHERE job_id="+UUID;
-	client.execute(query, function(err, result) {
-		console.log(err);
+	var query = "UPDATE dummyDB.jobInfo SET jobStatus='finished',pid='processFinished',accuracy=? ,model=? WHERE job_id=?";
+	client.execute(query, [accuracyValue,modelPath,UUID], { prepare: true },function(err, result) {
+		console.log("onProcessSucessDB Error : "+err);
 	});
 }
 
 function onJobCreationDB(UUID,pid) {
 	//console.log("pid : "+pid+ " : "+typeof(pid));
 	processIDSet.add(pid);
-	var query = "INSERT INTO dummyDB.jobInfo (user_id,job_id,jobStatus,jobType,pid) VALUES ('sjs7007testing',"+UUID+",'live','training','"+pid+"')";   
-	client.execute(query, function(err, result) {
-	  console.log(err);
+	var query = "INSERT INTO dummyDB.jobInfo (user_id,job_id,jobStatus,jobType,pid) VALUES ('sjs7007testing',?,'live','training',?)";   
+	client.execute(query, [UUID,pid.toString()], { prepare: true },function(err, result) {
+	  console.log("onJobCreationDB Error : "+err);
 	});
 }
 
@@ -55,10 +56,10 @@ function onProcessKillDB(pid) {
 
 ///http://stackoverflow.com/questions/23339907/returning-a-value-from-callback-function-in-node-js
 function dashboardPullDB(callback) {
-	var query = "SELECT pid,job_id,jobstatus,jobtype,model,prediction,user_id FROM dummyDb.jobInfo;";
-	client.execute(query,function(err,result) {
+	var query = "SELECT pid,job_id,jobstatus,jobtype,model,accuracyValue,prediction,user_id FROM dummyDb.jobInfo;";
+	client.execute(query, { prepare: true },function(err,result) {
 		if(err) {
-			console.log(err);
+			console.log("dashboardPullDB Error : "+err);
 		}
 		else {
 			//console.log(result);
@@ -69,10 +70,10 @@ function dashboardPullDB(callback) {
 }
 
 function dashboardPullDBSelective(callback,user_id) {
-	var query = "SELECT pid,job_id,jobstatus,jobtype,model,prediction,user_id FROM dummyDb.jobInfo WHERE user_id='"+user_id+"' ALLOW FILTERING;";
-	client.execute(query,function(err,result) {
+	var query = "SELECT pid,job_id,jobstatus,jobtype,model,prediction,user_id FROM dummyDb.jobInfo WHERE user_id=? ALLOW FILTERING;";
+	client.execute(query,[user_id], { prepare: true },function(err,result) {
 		if(err) {
-			console.log(err);
+			console.log("dashboardPullDBSelective  Error : "+err);
 		}
 		else {
 			//console.log(result);

@@ -1,3 +1,69 @@
 https://www.npmjs.com/package/delivery
 
-http://stackoverflow.com/questions/22279922/file-data-transfer-between-two-node-js-servers
+http://stackoverflow.com/questions/22279922/file-data-transfer-between-two-node-js-servers\
+
+
+---
+
+var cassandra = require('cassandra-driver');
+var client = new cassandra.Client({contactPoints: ['127.0.0.1:9042']});
+
+var fs = require('fs')
+fs.readFile('testBlob.txt', 'utf8', function (err,data) {
+  if (err) {
+    return console.log(err);
+  }
+  console.log(data);
+
+    var x = Buffer(data,"utf8");
+    console.log(x);
+  console.log(typeof x +"--<<");
+
+
+const query = 'INSERT INTO dummyDB.blob (user_name,file) VALUES (?,?)';
+
+
+client.execute(query, ['mick-jagger-2',x], { prepare: true }, function(err,result) {
+	console.log(err);
+	console.log(result);
+
+const query = 'SELECT file from dummyDB.blob where user_name=?';
+
+
+client.execute(query, ['mick-jagger-2'], { prepare: true }, function(err,result) {
+	console.log(result.rows[0].file);
+});
+
+});
+
+
+--
+
+var cassandra = require('cassandra-driver');
+var client = new cassandra.Client({contactPoints: ['127.0.0.1:9042']});
+
+var fs = require('fs')
+fs.readFile('testBlob.txt', 'utf8', function (err,data) {
+  if (err) {
+    return console.log(err);
+  }
+  console.log(data);
+  console.log(typeof data +" <<<<");
+
+  var x = Buffer(data,"utf8");
+  console.log(typeof x +"--<<");
+
+const query = 'INSERT INTO dummyDB.blob (user_name,text2) VALUES (?,?)';
+
+
+client.execute(query, ['mick-jagger-1','text2'], { prepare: true }, function(err,result) {
+	console.log(err);
+	console.log(result);
+});
+
+});
+
+
+----
+
+const query = 'SELECT name, email, birthdate FROM users WHERE key = ?';
