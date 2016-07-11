@@ -1,5 +1,5 @@
 {
-  "name": "exp",
+  "name": "s3lab",
   "version": "1.0.0",
   "description": "**1. MNIST Trainer** ---- Allows user to upload the [MNIST dataset](https://drive.google.com/open?id=0B-HwpreJA3WzbnZodkJZVWNfUTg) and get a trained model based on the parameters specified. Description about the dataset can be found [here](http://yann.lecun.com/exdb/mnist/).",
   "main": "index.js",
@@ -7,23 +7,23 @@
     "test": "test"
   },
   "dependencies": {
-    "cors": "^2.7.1",
     "express": "^4.14.0",
     "formidable": "^1.0.17",
-    "hashset": "^3.7.3"
+    "socket.io": "^1.4.8",
+    "socket.io-client": "^1.4.8"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "^2.5.3"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "mocha"
   },
-  "keywords": [],
-  "author": "",
-  "license": "BSD-2-Clause",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sjs7007/S3Lab.git"
   },
+  "author": "",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/sjs7007/S3Lab/issues"
   },

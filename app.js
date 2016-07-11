@@ -2,7 +2,7 @@
 
 var express = require('express');
 var routes = require('./routes');
-var app = express();
+var app = module.exports = express();
 var cors = require('cors');
 
 app.use(cors({origin: true}));

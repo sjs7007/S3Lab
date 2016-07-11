@@ -56,7 +56,7 @@ function onProcessKillDB(pid) {
 
 ///http://stackoverflow.com/questions/23339907/returning-a-value-from-callback-function-in-node-js
 function dashboardPullDB(callback) {
-	var query = "SELECT pid,job_id,jobstatus,jobtype,model,accuracyValue,prediction,user_id FROM dummyDb.jobInfo;";
+	var query = "SELECT pid,job_id,jobstatus,jobtype,model,accuracy,prediction,user_id FROM dummyDb.jobInfo;";
 	client.execute(query, { prepare: true },function(err,result) {
 		if(err) {
 			console.log("dashboardPullDB Error : "+err);
@@ -442,7 +442,7 @@ router.post("/killProcess",function(request,response) {
 router.get("/getDashboard",function(request,response) {
 	dashboardPullDB(function(result) {
 		console.log("result : "+JSON.stringify(result));
-		response.setHeader('Content-Type', 'application/json');
+		response.writeHead(200,{'Content-Type': 'application/json'});
    		response.end(JSON.stringify(result));
 	});
 });
