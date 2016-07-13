@@ -4,9 +4,9 @@
 var express = require('express');
 var routes = require('./routes');
 var app = module.exports = express();
-var cors = require('cors');
+//var cors = require('cors');
 
-app.use(cors({origin: true}));
+//app.use(cors({origin: true}));
 
 app.use('/', routes);
 

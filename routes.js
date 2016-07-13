@@ -14,6 +14,9 @@ var alreadyRunning =false;
 var HashSet = require('hashset-native');
 var processIDSet = new HashSet.int32();
 
+//http://stackoverflow.com/questions/13541948/node-js-cant-open-files-error-enoent-stat-path-to-file
+var path = require('path');
+
 
 //Database functions
 // In case app restarts after a crash, set status of all live jobs to crashed 
@@ -220,7 +223,7 @@ router.post("/generalPredictorImageUpload", function(request,response) {
 		logExceptOnTest("File name : "+files.upload.path);
 
 		var spawn = require('child_process').spawn,
-		    py    = spawn('python', ['./generalPredictSavedModel.py'], {cwd:"./generalPredictor"});
+		    py    = spawn('python', [path.join(__dirname,"generalPredictor",'/generalPredictSavedModel.py')], {cwd:path.join(__dirname,"/generalPredictor")});
 
 		py.stdout.on('data', function(data){
 		  logExceptOnTest("here1 : "+data);
@@ -258,7 +261,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 	var fileName = "";
 
 	form.on('fileBegin', function(name, file) {
-		file.path = "./S3LabUploads/"+file.name;
+		file.path = path.join(__dirname,"/S3LabUploads/",file.name);
 		//logExceptOnTest("Model ID : "+ ++modelID);
 		fileName = noExtension(file.name);
     });
@@ -273,7 +276,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 
 		var hasCrashed = false;
 		var spawn = require('child_process').spawn,
-		    py    = spawn('python', ['./newTest.py'], {cwd:"./S3LabUploads"});
+		    py    = spawn('python', [path.join(__dirname,'/S3LabUploads','/newTest.py')], {cwd:path.join(__dirname,"/S3LabUploads")});
 
 		
 		var UUID = uuid.v4();
@@ -369,7 +372,7 @@ router.post("/MNISTPredictor", function(request,response) {
 		logExceptOnTest("File name : "+files.upload.path);
 
 		var spawn = require('child_process').spawn,
-		    py    = spawn('python', ['./predictSavedModel.py'], {cwd:"./MNISTPredictor"});
+		    py    = spawn('python', [path.join(__dirname,"/MNISTPredictor",'/predictSavedModel.py')], {cwd:path.join(__dirname,"/MNISTPredictor")});
 
 		py.stdout.on('data', function(data){
 		  logExceptOnTest("here1 : "+data);
