@@ -1,3 +1,5 @@
+//timeouts : http://stackoverflow.com/questions/16607039/in-mocha-testing-while-calling-asynchronous-function-how-to-avoid-the-timeout-er
+
 var chai = require('chai');
 var chaiHTTP = require('chai-http');
 var server = require('../app');
@@ -33,6 +35,7 @@ describe('DatabaseTest',function() {
     });
 
     it('should return .. on /uploadCompleteScript POST', function(done) {
+        this.timeout(10000);
         chai.request(server)
         .post('/uploadCompleteScript')
         .field('width',28)
@@ -40,7 +43,7 @@ describe('DatabaseTest',function() {
         .field('nClass',10)
         .field('alpha',0.01)
         //.attach('upload',fs.readFileSync('testChai.jpg'))
-        .attach('upload',fs.readFileSync('MNIST_data.zip'))
+        .attach('upload',fs.readFileSync('MNIST_data.zip'),'MNIST_data.zip')
         .end(function(err,res) {
             res.should.have.status(200);
             done();
