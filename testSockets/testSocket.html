@@ -1,0 +1,9 @@
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost:9090');
+  socket.on('news', function (data) {
+    console.log("this is from server on client : "+data);
+    socket.emit('my other event', 'thisisfromclientonserver');
+  });
+</script>

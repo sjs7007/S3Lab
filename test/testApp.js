@@ -16,6 +16,7 @@ describe('DatabaseTest',function() {
         .get('/getDashboard')
         .end(function(err,res) {
            // console.log(res);
+           // add checks on data later 
             res.should.have.status(200);
             done();
         });
@@ -29,6 +30,7 @@ describe('DatabaseTest',function() {
         .query({user_id:'sjs7007'})
         .end(function(err,res) {
            // console.log(res);
+           //add checks on data later 
             res.should.have.status(200);
             done();
         });
@@ -45,6 +47,7 @@ describe('DatabaseTest',function() {
         //.attach('upload',fs.readFileSync('testChai.jpg'))
         .attach('upload',fs.readFileSync('MNIST_data.zip'),'MNIST_data.zip')
         .end(function(err,res) {
+            //add checks on data later 
             res.should.have.status(200);
             done();
         });
