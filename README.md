@@ -229,6 +229,7 @@ Allows user to kill training jobs with specific job_id.
 *  **URL Params**
 
    **Required:**
+   
    `job_id=[UUID]` : job_id of job.    
    `pid=[integer]` : process id of the child process spawned to perform training/testing.     
 
@@ -307,6 +308,7 @@ Allows user to resume training jobs with specific pid.
 *  **URL Params**
 
    **Required:**
+
    `job_id=[UUID]` : job_id of job.    
    `pid=[integer]` : process id of the child process spawned to perform training/testing.     
 
