@@ -8,7 +8,7 @@ var fs = require('fs');
 
 chai.use(chaiHTTP);
 
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = 'tes';
 
 describe('DatabaseTest',function() {
     it('should list all log entries on /getDashboard GET',function(done) {

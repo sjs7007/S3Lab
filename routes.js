@@ -52,9 +52,34 @@ function onJobCreationDB(UUID,pid) {
 	});
 }
 
-function onProcessKillDB(pid) {
+function onProcessKillDB(job_id,pid) {
 	processIDSet.remove(pid);
-	//add code to update db later
+	//add code to update db 
+	var query = "UPDATE dummyDb.jobInfo SET jobStatus='killed',pid='processKilled' WHERE job_id=?;";
+	client.execute(query,[job_id],{prepare : true}, function(err,result) {
+		if(err!=null) {
+			logExceptOnTest("onProcessKillDB error : "+err);
+		}
+	});
+}
+
+function onProcessSuspendDB(job_id) {
+	var query = "UPDATE dummyDb.jobInfo SET jobStatus='suspended' WHERE job_id=?;";
+	client.execute(query,[job_id],{prepare : true}, function(err,result) {
+		if(err!=null) {
+			logExceptOnTest("onProcessSuspendDB error : "+err);
+		}
+	});
+} 
+
+
+function onProcessResumeDB(job_id) {
+	var query = "UPDATE dummyDb.jobInfo SET jobStatus='live' WHERE job_id=?;";
+	client.execute(query,[job_id],{prepare : true}, function(err,result) {
+		if(err!=null) {
+			logExceptOnTest("onProcessResumeDB error : "+err);
+		}
+	});
 }
 
 ///http://stackoverflow.com/questions/23339907/returning-a-value-from-callback-function-in-node-js
@@ -103,6 +128,13 @@ function logExceptOnTest(ip) {
 	if(process.env.NODE_ENV!='test') {
 		console.log(ip);
 	}
+}
+
+function validJobID(job_id,callback) {
+	var query = "SELECT job_id from dummyDb.jobInfo WHERE job_id=?;";
+	client.execute(query,[job_id],{prepare:true},function(err,res) {
+		return callback(err,res);
+	});
 }
 
 // Runs for all routes 
@@ -402,49 +434,152 @@ router.post("/MNISTPredictor", function(request,response) {
 
 });
 
-// 5. Kill process with specific PID 
+// 5. Kill process with specific job_id, also supply pid
 router.post("/killProcess",function(request,response) {
 	var form = new formidable.IncomingForm();
 	form.parse(request,function(error,fields,files) {
 		logExceptOnTest(fields);
+		job_id = fields.job_id;
 		pid = parseInt(fields.pid);
-		if(processIDSet.contains(pid)) {
-			//try catch incase still fails because process is done
-		    try {
-				//processIDSet.remove(pid);
-				logExceptOnTest("Killing process with PID : "+pid);
-				process.kill(pid);
-
-				//update db and set
-				onProcessKillDB(pid);
-				response.writeHead(200, {"Content-Type": "text/html"});  
-			    response.write("Process killed.");  
-			    response.end();  
-			}
-			catch(err) {
-				//process killing failed
-				logExceptOnTest("error : "+err);
-				response.writeHead(400, {"Content-Type": "text/html"});  
-			    response.write("Process killing failed : "+err);  
-			    response.end();  
-			}
-
-			/*processIDSet.remove(pid);
-			logExceptOnTest("Killing process with PID : "+pid);
-			process.kill(pid);
-			response.writeHead(200, {"Content-Type": "text/html"});  
-		    response.write("Process killed.");  
-		    response.end();  */
-		}
-		else {
+		if(!processIDSet.contains(pid)) {
 			logExceptOnTest("Process killing failed.");
 			response.writeHead(400, {"Content-Type": "text/html"});  
 		    response.write("Process killing failed : not a child process.");  
 		    response.end();  
 		}
+		else 
+		{
+			validJobID(job_id,function(err,res) {
+				if(err!=null) {
+					logExceptOnTest("Invalid job ID : "+err);
+					logExceptOnTest("Process killing failed : invalid job_id.");
+					response.writeHead(400, {"Content-Type": "text/html"});  
+				    response.write("Process killing failed : not a valid job_id.");  
+				    response.end();  
+				}
+				else {
+					//try catch incase still fails because process is done
+				    try {
+						//processIDSet.remove(pid);
+						logExceptOnTest("Killing process with PID : "+pid+" and job_id"+job_id);
+						process.kill(pid);
+
+						//update db and set
+						onProcessKillDB(job_id,pid);
+						response.writeHead(200, {"Content-Type": "text/html"});  
+					    response.write("Process killed.");  
+					    response.end();  
+					}
+					catch(err) {
+						//process killing failed
+						logExceptOnTest("error : "+err);
+						response.writeHead(400, {"Content-Type": "text/html"});  
+					    response.write("Process killing failed : "+err);  
+					    response.end();  
+					}
+				}
+			});
+		}
+			
+	});
+});
+
+// 8. Suspend job with specific UUID, also needs PID
+router.post("/suspendProcess",function(request,response) {
+	var form = new formidable.IncomingForm();
+	form.parse(request,function(error,fields,files) {
+		logExceptOnTest(fields);
+		pid = parseInt(fields.pid);
+		job_id = fields.job_id;
+		if(!processIDSet.contains(pid)) {
+			logExceptOnTest("Process suspension failed : not a child process.");
+			response.writeHead(400, {"Content-Type": "text/html"});  
+		    response.write("Process suspension failed : not a child process.");  
+		    response.end();  
+		}
+		else 
+		{
+			validJobID(job_id,function(err,res) {
+				if(err!=null) {
+					logExceptOnTest("Invalid job ID : "+err);
+					logExceptOnTest("Process suspension failed : invalid job_id.");
+					response.writeHead(400, {"Content-Type": "text/html"});  
+				    response.write("Process suspension failed : not a valid job_id.");  
+				    response.end();  
+				}
+				else {
+					//try catch incase still fails because process is done
+				    try {
+						//processIDSet.remove(pid);
+						logExceptOnTest("Suspending process with PID : "+pid+" and job_id"+job_id);
+						process.kill(pid,"SIGTSTP");
+
+						//update db and set
+						onProcessSuspendDB(job_id);
+						response.writeHead(200, {"Content-Type": "text/html"});  
+					    response.write("Process suspended.");  
+					    response.end();  
+					}
+					catch(err) {
+						//process suspension failed
+						logExceptOnTest("error : "+err);
+						response.writeHead(400, {"Content-Type": "text/html"});  
+					    response.write("Process suspension failed : "+err);  
+					    response.end();  
+					}
+				}
+			});
+		}		
+	});
+});
+
+// 9. Kill process with specific PID 
+router.post("/resumeProcess",function(request,response) {
+	var form = new formidable.IncomingForm();
+	form.parse(request,function(error,fields,files) {
+		logExceptOnTest(fields);
+		pid = parseInt(fields.pid);
+		job_id = fields.job_id;
 		
-		
-		
+		if(!processIDSet.contains(pid)) {
+			logExceptOnTest("Process resuming failed.");
+			response.writeHead(400, {"Content-Type": "text/html"});  
+		    response.write("Process resuming failed : not a child process.");  
+		    response.end();  
+		}
+		else 
+		{
+			validJobID(job_id,function(err,res) {
+				if(err!=null) {
+					logExceptOnTest("Invalid job ID : "+err);
+					logExceptOnTest("Process resuming failed : invalid job_id.");
+					response.writeHead(400, {"Content-Type": "text/html"});  
+				    response.write("Process resuming failed : not a valid job_id.");  
+				    response.end();  
+				}
+				else {
+					//try catch incase still fails because process is done
+				    try {
+						//processIDSet.remove(pid);
+						logExceptOnTest("resume process with PID : "+pid+" and job_id"+job_id);
+						process.kill(pid,"SIGCONT");
+
+						//update db and set
+						onProcessResumeDB(job_id,pid);
+						response.writeHead(200, {"Content-Type": "text/html"});  
+					    response.write("Process resumed.");  
+					    response.end();  
+					}
+					catch(err) {
+						//process killing failed
+						logExceptOnTest("error : "+err);
+						response.writeHead(400, {"Content-Type": "text/html"});  
+					    response.write("Process resuming failed : "+err);  
+					    response.end();  
+					}
+				}
+			});
+		}
 	});
 });
 
@@ -467,8 +602,6 @@ router.get("/getDashboardSelective",function(request,response) {
    		response.end(JSON.stringify(result));
 	},request.query.user_id);
 });
-
-
 
 module.exports = router;
 

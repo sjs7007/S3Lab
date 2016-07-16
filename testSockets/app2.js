@@ -20,5 +20,19 @@ io.on('connection', function (socket) {
   		console.log(pyStdout.toString());
   		socket.emit('pythonSocket',pyStdout.toString());
   	});
+
+  	//to stop process 
+  	socket.on("pause",function() {
+  		console.log("pausing pid : "+py.pid);
+  		socket.emit("pythonSocket","pausing pid : "+py.pid);
+  		process.kill(py.pid,"SIGTSTP");
+  	});
+
+  	//to resume process
+  	socket.on("continue",function() {
+  		console.log("resuming pid : "+py.pid);
+  		socket.emit("pythonSocket","resuming pid : "+py.pid);
+  		process.kill(py.pid,"SIGCONT");
+  	});	
   
 });
