@@ -229,7 +229,7 @@ Allows user to kill training jobs with specific job_id.
 *  **URL Params**
 
    **Required:**
-   `job_id=[UUID]` : job_id of job.
+   `job_id=[UUID]` : job_id of job.    
    `pid=[integer]` : process id of the child process spawned to perform training/testing.     
 
 * **Success Response:**
@@ -269,7 +269,7 @@ Allows user to suspend training jobs with specific job_id.
 
    **Required:**
     
-   `job_id=[UUID]` : job_id of job.
+   `job_id=[UUID]` : job_id of job.    
    `pid=[integer]` : process id of the child process spawned to perform training/testing.     
 
 * **Success Response:**
@@ -307,7 +307,7 @@ Allows user to resume training jobs with specific pid.
 *  **URL Params**
 
    **Required:**
-   `job_id=[UUID]` : job_id of job.
+   `job_id=[UUID]` : job_id of job.    
    `pid=[integer]` : process id of the child process spawned to perform training/testing.     
 
 * **Success Response:**
