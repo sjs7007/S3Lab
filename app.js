@@ -4,15 +4,29 @@
 var express = require('express');
 var routes = require('./routes');
 var app = module.exports = express();
-//var cors = require('cors');
+var cors = require('cors');
 
-//app.use(cors({origin: true}));
+app.use(cors({origin: true}));
 
 app.use('/', routes);
 
 app.use("/S3LabUploads",express.static('S3LabUploads'));
 
-
-app.listen(8888, function () {
-  console.log('App listening on port 8888!');
+var server = app.listen(8888, function () {
+	console.log('App listening on port 8888!');
 });
+
+
+
+// socket part 
+/*var io = require('socket.io').listen(server);
+
+io.on('connection',function(socket) {
+	socket.emit('test','testFromServer2');
+});
+
+without splitting in files
+*/
+
+// http://stackoverflow.com/questions/9709912/separating-file-server-and-socket-io-logic-in-node-js
+var io = require('./socketRoutes').listen(server);
