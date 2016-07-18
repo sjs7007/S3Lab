@@ -333,7 +333,7 @@ router.post("/killProcess",function(request,response) {
 		}
 		else 
 		{
-			validJobID(job_id,function(err,res) {
+			helper.validJobID(job_id,function(err,res) {
 				if(err!=null) {
 					helper.logExceptOnTest("Invalid job ID : "+err);
 					helper.logExceptOnTest("Process killing failed : invalid job_id.");
@@ -382,7 +382,7 @@ router.post("/suspendProcess",function(request,response) {
 		}
 		else 
 		{
-			validJobID(job_id,function(err,res) {
+			helper.validJobID(job_id,function(err,res) {
 				if(err!=null) {
 					helper.logExceptOnTest("Invalid job ID : "+err);
 					helper.logExceptOnTest("Process suspension failed : invalid job_id.");
@@ -431,7 +431,7 @@ router.post("/resumeProcess",function(request,response) {
 		}
 		else 
 		{
-			validJobID(job_id,function(err,res) {
+			helper.validJobID(job_id,function(err,res) {
 				if(err!=null) {
 					helper.logExceptOnTest("Invalid job ID : "+err);
 					helper.logExceptOnTest("Process resuming failed : invalid job_id.");
