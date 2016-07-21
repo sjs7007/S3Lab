@@ -243,12 +243,8 @@ router.post("/uploadCompleteScript",function (request,response) {
 				accuracyValue = accuracyValue[accuracyValue.length-1]['Accuracy'];
 			}
 			catch (err) {
-<<<<<<< HEAD
         hasCrashed = true;
-				helper.logExceptOnTest("error : "+err);
-=======
 				helper.logExceptOnTest("python error : "+err);
->>>>>>> 61a425d7ef43d2a309ca79ff4c1cf39e3c0d46c0
 				accuracyValue = "null";
 			}
 			
@@ -264,12 +260,6 @@ router.post("/uploadCompleteScript",function (request,response) {
         response.write("Python process failed : maybe problem in tensorflow.");
         response.end();
 			}
-<<<<<<< HEAD
-			//console.log("->"+dataString)      
-=======
-			console.log('response end');
-			response.end();
->>>>>>> 61a425d7ef43d2a309ca79ff4c1cf39e3c0d46c0
 		});
 		py.stdin.write(JSON.stringify(data));
 		py.stdin.end();
