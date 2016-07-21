@@ -208,7 +208,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 		
 
 
-        var jsonSend = fields;
+    var jsonSend = fields;
 		jsonSend["File Name"]=fileName;
 		jsonSend["modelID"]=UUID;
 		data = JSON.stringify(jsonSend) ;
@@ -241,6 +241,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 				accuracyValue = accuracyValue[accuracyValue.length-1]['Accuracy'];
 			}
 			catch (err) {
+        hasCrashed = true;
 				helper.logExceptOnTest("error : "+err);
 				accuracyValue = "null";
 			}
@@ -248,12 +249,16 @@ router.post("/uploadCompleteScript",function (request,response) {
 			
 			if(!hasCrashed) {
 				database.onProcessSucessDB(accuracyValue,modelPath,UUID,py.pid);
+				response.setHeader('Content-Type', 'application/json');
+   			response.end(JSON.stringify({ Accuracy : dataString  , trainedModel : modelPath }));
 			}
 			else {
-
+        database.onProcessFailDB(accuracyValue,"null",UUID,py.pid);
+        response.writeHead(500, {'content-type': 'text/html'});
+        response.write("Python process failed : maybe problem in tensorflow.");
+        response.end();
 			}
-			response.setHeader('Content-Type', 'application/json');
-   			response.end(JSON.stringify({ Accuracy : dataString  , trainedModel : modelPath }));
+			//console.log("->"+dataString)      
 		});
 		py.stdin.write(JSON.stringify(data));
 		py.stdin.end();

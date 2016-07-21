@@ -99,4 +99,5 @@ accuracy_value = sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.t
 epoch = float(TRAIN_SIZE) * BATCH_SIZE / TRAIN_SIZE
 training_result = {'Epoch':epoch, 'Accuracy':str(accuracy_value)}
 training_result_list.append(training_result)
+#training_result_list.append({'Status':'Success'})
 print(json.dumps(training_result_list))

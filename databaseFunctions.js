@@ -32,6 +32,14 @@ module.exports = {
 		});
 	},
 
+    onProcessFailDB : function(accuracyValue,modelPath, UUID, pid) {
+		processIDSet.remove(pid);
+		var query = "UPDATE dummyDB.jobInfo SET jobStatus='finished',pid='processCrashed',accuracy=? ,model=? WHERE job_id=?";
+		client.execute(query, [accuracyValue,modelPath,UUID], { prepare: true },function(err, result) {
+			helper.logExceptOnTest("onProcessFailDB Error : "+err);
+		});
+	},
+
 	onJobCreationDB : function(UUID,pid) {
 		//helper.logExceptOnTest("pid : "+pid+ " : "+typeof(pid));
 		processIDSet.add(pid);

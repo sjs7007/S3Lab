@@ -48,6 +48,7 @@ describe('DatabaseTest',function() {
         .attach('upload',fs.readFileSync('MNIST_data.zip'),'MNIST_data.zip')
         .end(function(err,res) {
             //add checks on data later 
+            //console.log("result : "+res.body[0])
             res.should.have.status(200);
             done();
         });
