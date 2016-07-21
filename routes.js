@@ -251,7 +251,9 @@ router.post("/uploadCompleteScript",function (request,response) {
 
 			if(!hasCrashed) {
 				database.onProcessSucessDB(dataString,modelPath,UUID,py.pid);
-				response.setHeader('Content-Type', 'application/json');
+				if(!response.headersSent) {
+					response.setHeader('Content-Type', 'application/json');
+				}
    			response.end(JSON.stringify({ Accuracy : dataString  , trainedModel : modelPath }));
 			}
 			else {
