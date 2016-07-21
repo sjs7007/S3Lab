@@ -220,8 +220,8 @@ router.post("/uploadCompleteScript",function (request,response) {
 		  helper.logExceptOnTest("here1");
 		  helper.logExceptOnTest(data.toString());
 		  dataString = data.toString();
-		  console.log("writing data");
-		  response.write(JSON.stringify({ Accuracy : dataString  , trainedModel : modelPath }));
+		  //console.log("writing data");
+		  //response.write(JSON.stringify({ Accuracy : dataString  , trainedModel : modelPath }));
 		  //response.end();
 		});
 
@@ -250,7 +250,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 			
 			
 			if(!hasCrashed) {
-				database.onProcessSucessDB(accuracyValue,modelPath,UUID,py.pid);
+				database.onProcessSucessDB(dataString,modelPath,UUID,py.pid);
 				response.setHeader('Content-Type', 'application/json');
    			response.end(JSON.stringify({ Accuracy : dataString  , trainedModel : modelPath }));
 			}

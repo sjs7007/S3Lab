@@ -5,6 +5,8 @@ var chaiHTTP = require('chai-http');
 var server = require('../app');
 var should = chai.should();
 var fs = require('fs');
+var dl = require('delivery');
+var io = require('socket.io-client');
 
 chai.use(chaiHTTP);
 
@@ -36,7 +38,7 @@ describe('DatabaseTest',function() {
         });
     });
 
-    it('should return .. on /uploadCompleteScript POST', function(done) {
+    it('should return 200 on /uploadCompleteScript POST', function(done) {
         this.timeout(10000);
         chai.request(server)
         .post('/uploadCompleteScript')
@@ -54,5 +56,40 @@ describe('DatabaseTest',function() {
         });
     });
 
+    //just automate socket call 
+    // no test
+    it('socket-call-test',function(done) {
+        this.timeout(10000);
+
+        var socket = io.connect('http://0.0.0.0:8888');
+
+        socket.on( 'connect', function() {
+        console.log( "Sockets connected" );
+                
+        delivery = dl.listen( socket );
+        delivery.connect();
+            
+        delivery.on('delivery.connect',function(delivery){
+            delivery.send({
+              name: 'MNIST_data.zip',
+              path : './MNIST_data.zip',
+              params : {width : "28",height : "28", nClass : "10", alpha : "0.01"}
+            });
+
+            //socket.disconnect();
+            //socket.connect();
+         
+            delivery.on('send.success',function(file){
+              console.log('File sent successfully!');
+            });
+          });
+        });
+
+        socket.on('/trainingSocket/result',function(data) {
+          console.log("On /trainingSocket/result socket endpoint : "+data);
+          done();
+        });
+
+    }); 
 
 });
