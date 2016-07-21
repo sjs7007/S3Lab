@@ -171,6 +171,7 @@ router.post("/generalPredictorImageUpload", function(request,response) {
 
 // 3. Endpoint for training and testing on the MNIST dataset 
 router.post("/uploadCompleteScript",function (request,response) {
+	var oldDataString = "";
 	helper.logExceptOnTest("Request handler 'uploadCompleteScript' was called.");
 	var form = new formidable.IncomingForm();
 	form.keepExtensions = true;
@@ -213,12 +214,15 @@ router.post("/uploadCompleteScript",function (request,response) {
 		jsonSend["modelID"]=UUID;
 		data = JSON.stringify(jsonSend) ;
 		helper.logExceptOnTest("Sending : "+data);
-
-
+		var modelPath = "/S3LabUploads/"+fileName+"_"+UUID+".ckpt";
+		response.setHeader('Content-Type', 'application/json');
 		py.stdout.on('data', function(data){
 		  helper.logExceptOnTest("here1");
 		  helper.logExceptOnTest(data.toString());
 		  dataString = data.toString();
+		  console.log("writing data");
+		  response.write(JSON.stringify({ Accuracy : dataString  , trainedModel : modelPath }));
+		  //response.end();
 		});
 
 		helper.logExceptOnTest("here2");
@@ -231,8 +235,6 @@ router.post("/uploadCompleteScript",function (request,response) {
 		});
 
 		py.stdout.on('end', function(){
-			
-			var modelPath = "/S3LabUploads/"+fileName+"_"+UUID+".ckpt";
 			var accuracyValue = "dummyForNow";
 
 			//skip things below if process was killed, 
@@ -241,7 +243,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 				accuracyValue = accuracyValue[accuracyValue.length-1]['Accuracy'];
 			}
 			catch (err) {
-				helper.logExceptOnTest("error : "+err);
+				helper.logExceptOnTest("python error : "+err);
 				accuracyValue = "null";
 			}
 			
@@ -252,8 +254,8 @@ router.post("/uploadCompleteScript",function (request,response) {
 			else {
 
 			}
-			response.setHeader('Content-Type', 'application/json');
-   			response.end(JSON.stringify({ Accuracy : dataString  , trainedModel : modelPath }));
+			console.log('response end');
+			response.end();
 		});
 		py.stdin.write(JSON.stringify(data));
 		py.stdin.end();
