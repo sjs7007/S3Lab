@@ -21,7 +21,7 @@ var uuid = require('node-uuid');
 var helper = require('./helperFunctions');
 var database = require('./databaseFunctions');
 
-// Runs for all routes 
+// Runs for all routes
 router.use(function timeLog(req, res, next) {
   helper.logExceptOnTest('Time: ', Date.now());
   //cleare database on app start
@@ -34,8 +34,8 @@ router.use(function timeLog(req, res, next) {
 
 
 
-//Basic HTML Page renders 
-// 1. Home Page 
+//Basic HTML Page renders
+// 1. Home Page
 
 router.get('/', function(request, response) {
 	helper.logExceptOnTest("Homepage requested.")
@@ -49,49 +49,49 @@ router.get('/', function(request, response) {
     });
 });
 
-// 2. Pretrained MNIST page 
+// 2. Pretrained MNIST page
 router.get("/MNISTPredictorPage",function (request,response) {
 	helper.logExceptOnTest("Request handler 'MNISTPredictorPage' was called.");
 
 	fs.readFile('./MNISTPredictor.html', function (err, html) {
 	    if (err) {
-	        throw err; 
-    	}       
-	    response.writeHead(200, {"Content-Type": "text/html"});  
-	    response.write(html);  
-	    response.end();  
+	        throw err;
+    	}
+	    response.writeHead(200, {"Content-Type": "text/html"});
+	    response.write(html);
+	    response.end();
     });
 });
 
-// 3. General Predictor Page 
+// 3. General Predictor Page
 router.get("/generalPredictorPage",function(request,response) {
-	helper.logExceptOnTest("Request handler 'generalPredictorPage' was called."); 
+	helper.logExceptOnTest("Request handler 'generalPredictorPage' was called.");
 
 	fs.readFile('./generalPredictor.html', function (err, html) {
 	    if (err) {
-	        throw err; 
-    	}       
-	    response.writeHead(200, {"Content-Type": "text/html"});  
-	    response.write(html);  
-	    response.end();  
+	        throw err;
+    	}
+	    response.writeHead(200, {"Content-Type": "text/html"});
+	    response.write(html);
+	    response.end();
     });
 
 });
 
-// 4. Kill process with PID 
+// 4. Kill process with PID
 router.get("/killProcessPage", function(request,response) {
 	helper.logExceptOnTest("Request handler for killProcess called.");
 	fs.readFile('./killProcess.html', function(err,html) {
 		if (err) {
 			throw err;
 		}
-		response.writeHead(200, {"Content-Type": "text/html"});  
-	    response.write(html);  
-	    response.end();  
+		response.writeHead(200, {"Content-Type": "text/html"});
+	    response.write(html);
+	    response.end();
 	});
 });
 
-// API endpoints 
+// API endpoints
 
 // 1. Upload the model for general predciton
 router.post("/generalPredictorModelUpload",function(request,response) {
@@ -113,11 +113,11 @@ router.post("/generalPredictorModelUpload",function(request,response) {
 	});
 });
 
-// 2. Upload image to be used by general predictor 
+// 2. Upload image to be used by general predictor
 router.post("/generalPredictorImageUpload", function(request,response) {
 	helper.logExceptOnTest("Request handler 'generalPredictorImageUpload' was called.");
 	var form = new formidable.IncomingForm();
-	form.keepExtensions = true; 
+	form.keepExtensions = true;
 	var data = "";
 
 	form.on('fileBegin', function(name, file) {
@@ -169,7 +169,7 @@ router.post("/generalPredictorImageUpload", function(request,response) {
 
 });
 
-// 3. Endpoint for training and testing on the MNIST dataset 
+// 3. Endpoint for training and testing on the MNIST dataset
 router.post("/uploadCompleteScript",function (request,response) {
 	var oldDataString = "";
 	helper.logExceptOnTest("Request handler 'uploadCompleteScript' was called.");
@@ -195,18 +195,18 @@ router.post("/uploadCompleteScript",function (request,response) {
 		var spawn = require('child_process').spawn,
 		    py    = spawn('python', [path.join(__dirname,'/S3LabUploads','/newTest.py')], {cwd:path.join(__dirname,"/S3LabUploads")});
 
-		
+
 		var UUID = uuid.v4();
 
 		helper.logExceptOnTest("Process started with PID : "+py.pid+" and title "+py.title+"\n");
 		py.title= 'trainingJob'+UUID;
 
-		
+
 
 		database.onJobCreationDB(UUID,py.pid);
 
 
-		
+
 
 
     var jsonSend = fields;
@@ -220,14 +220,14 @@ router.post("/uploadCompleteScript",function (request,response) {
 		  helper.logExceptOnTest("here1");
 		  helper.logExceptOnTest(data.toString());
 		  dataString = data.toString();
-		  //console.log("writing data");
-		  //response.write(JSON.stringify({ Accuracy : dataString  , trainedModel : modelPath }));
-		  //response.end();
+		  console.log("writing data");
+		  response.write(JSON.stringify({ Accuracy : dataString  , trainedModel : modelPath }));
+		  response.end();
 		});
 
 		helper.logExceptOnTest("here2");
 
-		
+
 		py.stderr.on('data', function(data) {
 		  hasCrashed = true;
 		  helper.logExceptOnTest('stdout: ' + data);
@@ -237,7 +237,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 		py.stdout.on('end', function(){
 			var accuracyValue = "dummyForNow";
 
-			//skip things below if process was killed, 
+			//skip things below if process was killed,
 			try {
 				accuracyValue = JSON.parse(dataString);
 				accuracyValue = accuracyValue[accuracyValue.length-1]['Accuracy'];
@@ -247,8 +247,8 @@ router.post("/uploadCompleteScript",function (request,response) {
 				helper.logExceptOnTest("python error : "+err);
 				accuracyValue = "null";
 			}
-			
-			
+
+
 			if(!hasCrashed) {
 				database.onProcessSucessDB(dataString,modelPath,UUID,py.pid);
 				response.setHeader('Content-Type', 'application/json');
@@ -263,7 +263,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 		});
 		py.stdin.write(JSON.stringify(data));
 		py.stdin.end();
-		
+
 	});
 
 });
@@ -272,7 +272,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 router.post("/MNISTPredictor", function(request,response) {
 	helper.logExceptOnTest("Request handler 'MNISTPredictor' was called.");
 	var form = new formidable.IncomingForm();
-	form.keepExtensions = true; 
+	form.keepExtensions = true;
 	var data = "";
 
 	form.on('fileBegin', function(name, file) {
@@ -333,19 +333,19 @@ router.post("/killProcess",function(request,response) {
 		pid = parseInt(fields.pid);
 		if(!database.processIDSetContains(pid)) {
 			helper.logExceptOnTest("Process killing failed.");
-			response.writeHead(400, {"Content-Type": "text/html"});  
-		    response.write("Process killing failed : not a child process.");  
-		    response.end();  
+			response.writeHead(400, {"Content-Type": "text/html"});
+		    response.write("Process killing failed : not a child process.");
+		    response.end();
 		}
-		else 
+		else
 		{
 			helper.validJobID(job_id,function(err,res) {
 				if(err!=null) {
 					helper.logExceptOnTest("Invalid job ID : "+err);
 					helper.logExceptOnTest("Process killing failed : invalid job_id.");
-					response.writeHead(400, {"Content-Type": "text/html"});  
-				    response.write("Process killing failed : not a valid job_id.");  
-				    response.end();  
+					response.writeHead(400, {"Content-Type": "text/html"});
+				    response.write("Process killing failed : not a valid job_id.");
+				    response.end();
 				}
 				else {
 					//try catch incase still fails because process is done
@@ -355,21 +355,21 @@ router.post("/killProcess",function(request,response) {
 
 						//update db and set
 						database.onProcessKillDB(job_id,pid);
-						response.writeHead(200, {"Content-Type": "text/html"});  
-					    response.write("Process killed.");  
-					    response.end();  
+						response.writeHead(200, {"Content-Type": "text/html"});
+					    response.write("Process killed.");
+					    response.end();
 					}
 					catch(err) {
 						//process killing failed
 						helper.logExceptOnTest("error : "+err);
-						response.writeHead(400, {"Content-Type": "text/html"});  
-					    response.write("Process killing failed : "+err);  
-					    response.end();  
+						response.writeHead(400, {"Content-Type": "text/html"});
+					    response.write("Process killing failed : "+err);
+					    response.end();
 					}
 				}
 			});
 		}
-			
+
 	});
 });
 
@@ -382,19 +382,19 @@ router.post("/suspendProcess",function(request,response) {
 		job_id = fields.job_id;
 		if(!database.processIDSetContains(pid)) {
 			helper.logExceptOnTest("Process suspension failed : not a child process.");
-			response.writeHead(400, {"Content-Type": "text/html"});  
-		    response.write("Process suspension failed : not a child process.");  
-		    response.end();  
+			response.writeHead(400, {"Content-Type": "text/html"});
+		    response.write("Process suspension failed : not a child process.");
+		    response.end();
 		}
-		else 
+		else
 		{
 			helper.validJobID(job_id,function(err,res) {
 				if(err!=null) {
 					helper.logExceptOnTest("Invalid job ID : "+err);
 					helper.logExceptOnTest("Process suspension failed : invalid job_id.");
-					response.writeHead(400, {"Content-Type": "text/html"});  
-				    response.write("Process suspension failed : not a valid job_id.");  
-				    response.end();  
+					response.writeHead(400, {"Content-Type": "text/html"});
+				    response.write("Process suspension failed : not a valid job_id.");
+				    response.end();
 				}
 				else {
 					//try catch incase still fails because process is done
@@ -404,46 +404,46 @@ router.post("/suspendProcess",function(request,response) {
 
 						//update db and set
 						database.onProcessSuspendDB(job_id);
-						response.writeHead(200, {"Content-Type": "text/html"});  
-					    response.write("Process suspended.");  
-					    response.end();  
+						response.writeHead(200, {"Content-Type": "text/html"});
+					    response.write("Process suspended.");
+					    response.end();
 					}
 					catch(err) {
 						//process suspension failed
 						helper.logExceptOnTest("error : "+err);
-						response.writeHead(400, {"Content-Type": "text/html"});  
-					    response.write("Process suspension failed : "+err);  
-					    response.end();  
+						response.writeHead(400, {"Content-Type": "text/html"});
+					    response.write("Process suspension failed : "+err);
+					    response.end();
 					}
 				}
 			});
-		}		
+		}
 	});
 });
 
-// 9. Kill process with specific PID 
+// 9. Kill process with specific PID
 router.post("/resumeProcess",function(request,response) {
 	var form = new formidable.IncomingForm();
 	form.parse(request,function(error,fields,files) {
 		helper.logExceptOnTest(fields);
 		pid = parseInt(fields.pid);
 		job_id = fields.job_id;
-		
+
 		if(!database.processIDSetContains(pid)) {
 			helper.logExceptOnTest("Process resuming failed.");
-			response.writeHead(400, {"Content-Type": "text/html"});  
-		    response.write("Process resuming failed : not a child process.");  
-		    response.end();  
+			response.writeHead(400, {"Content-Type": "text/html"});
+		    response.write("Process resuming failed : not a child process.");
+		    response.end();
 		}
-		else 
+		else
 		{
 			helper.validJobID(job_id,function(err,res) {
 				if(err!=null) {
 					helper.logExceptOnTest("Invalid job ID : "+err);
 					helper.logExceptOnTest("Process resuming failed : invalid job_id.");
-					response.writeHead(400, {"Content-Type": "text/html"});  
-				    response.write("Process resuming failed : not a valid job_id.");  
-				    response.end();  
+					response.writeHead(400, {"Content-Type": "text/html"});
+				    response.write("Process resuming failed : not a valid job_id.");
+				    response.end();
 				}
 				else {
 					//try catch incase still fails because process is done
@@ -453,16 +453,16 @@ router.post("/resumeProcess",function(request,response) {
 
 						//update db and set
 						database.onProcessResumeDB(job_id,pid);
-						response.writeHead(200, {"Content-Type": "text/html"});  
-					    response.write("Process resumed.");  
-					    response.end();  
+						response.writeHead(200, {"Content-Type": "text/html"});
+					    response.write("Process resumed.");
+					    response.end();
 					}
 					catch(err) {
 						//process killing failed
 						helper.logExceptOnTest("error : "+err);
-						response.writeHead(400, {"Content-Type": "text/html"});  
-					    response.write("Process resuming failed : "+err);  
-					    response.end();  
+						response.writeHead(400, {"Content-Type": "text/html"});
+					    response.write("Process resuming failed : "+err);
+					    response.end();
 					}
 				}
 			});
@@ -480,7 +480,7 @@ router.get("/getDashboard",function(request,response) {
 	});
 });
 
-// 7. Get Dashboard selective : i.e. info about specific user 
+// 7. Get Dashboard selective : i.e. info about specific user
 
 router.get("/getDashboardSelective",function(request,response) {
 	database.dashboardPullDBSelective(function(result) {
@@ -491,4 +491,3 @@ router.get("/getDashboardSelective",function(request,response) {
 });
 
 module.exports = router;
-
