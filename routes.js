@@ -222,7 +222,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 		  dataString = data.toString();
 		  console.log("writing data");
 		  response.write(JSON.stringify({ Accuracy : dataString  , trainedModel : modelPath }));
-		  response.end();
+		  //response.end();
 		});
 
 		helper.logExceptOnTest("here2");
@@ -254,7 +254,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 				if(!response.headersSent) {
 					response.setHeader('Content-Type', 'application/json');
 				}
-   			response.end(JSON.stringify({ Accuracy : dataString  , trainedModel : modelPath }));
+   				response.end(JSON.stringify({ Accuracy : dataString  , trainedModel : modelPath }));
 			}
 			else {
         database.onProcessFailDB(accuracyValue,"null",UUID,py.pid);
