@@ -86,10 +86,11 @@ for i in xrange(int(TRAIN_SIZE)):
 	  loss = tf.reduce_mean(cross_entropy, name='xentropy_mean')
 	  accuracy_value, loss_value = sess.run([accuracy, loss], feed_dict={x: mnist.test.images, y_: mnist.test.labels})
 	  epoch = float(i) * BATCH_SIZE / TRAIN_SIZE
-	  print("Step %d (Epoch %.2f)" % (i, epoch))
-	  print(accuracy_value, loss_value)
+	  #print("Step %d (Epoch %.2f)" % (i, epoch))
+	  #print(accuracy_value, loss_value)
 	  training_result = {'Epoch':epoch, 'Accuracy':str(accuracy_value)}
 	  training_result_list.append(training_result)
+	  print(json.dumps(training_result_list))
 	  sys.stdout.flush()
 saver.save(sess, paramtersDict["File Name"]+"_"+str(paramtersDict["modelID"])+".ckpt");
 

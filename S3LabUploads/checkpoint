@@ -1,2 +1,0 @@
-model_checkpoint_path: "MNIST_data_bae71105-8dcc-478d-bdf2-779ae2b2b540.ckpt"
-all_model_checkpoint_paths: "MNIST_data_bae71105-8dcc-478d-bdf2-779ae2b2b540.ckpt"

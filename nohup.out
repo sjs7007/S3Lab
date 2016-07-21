@@ -10,3 +10,96 @@ Time:  1467782704427
 Homepage requested.
 Time:  1467783152193
 Homepage requested.
+App listening on port 8888!
+Time: 
+Clearing up Database...
+Homepage requested.
+Time: 
+App listening on port 8888!
+Time: 
+Clearing up Database...
+result : {"info":{"queriedHost":"127.0.0.1:9042","triedHosts":{},"achievedConsistency":10},"rows":[{"pid":"processCrashed","job_id":"190af2ee-c126-4ba7-8bfc-df333a124c1f","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"1181","job_id":"1b39b82f-9de7-4c61-ac47-bd1a754b218d","jobstatus":"live","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"f02d1418-2c18-47c7-91b2-dedba35a983a","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"1de6dd77-1b55-43d5-8f91-57f70a2cf354","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"51c18afe-5fc1-49e4-a277-7f0b00762fa7","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"657c574e-f3a5-4f3c-9aa6-3fb3c467d019","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"e3b00d4f-3645-4628-9b3a-60c24e5d81b4","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"fbcc90ce-889a-4cdb-81da-76f2f74486d3","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"}],"rowLength":8,"columns":[{"name":"pid","type":{"code":13,"type":null}},{"name":"job_id","type":{"code":12,"type":null}},{"name":"jobstatus","type":{"code":13,"type":null}},{"name":"jobtype","type":{"code":13,"type":null}},{"name":"model","type":{"code":13,"type":null}},{"name":"accuracy","type":{"code":13,"type":null}},{"name":"prediction","type":{"code":13,"type":null}},{"name":"user_id","type":{"code":13,"type":null}}],"pageState":null}
+onDatabaseStart Error : null
+Time: 
+Time: 
+result : {"info":{"queriedHost":"127.0.0.1:9042","triedHosts":{},"achievedConsistency":10},"rows":[{"pid":"processCrashed","job_id":"190af2ee-c126-4ba7-8bfc-df333a124c1f","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"1b39b82f-9de7-4c61-ac47-bd1a754b218d","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"f02d1418-2c18-47c7-91b2-dedba35a983a","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"1de6dd77-1b55-43d5-8f91-57f70a2cf354","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"51c18afe-5fc1-49e4-a277-7f0b00762fa7","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"657c574e-f3a5-4f3c-9aa6-3fb3c467d019","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"e3b00d4f-3645-4628-9b3a-60c24e5d81b4","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"fbcc90ce-889a-4cdb-81da-76f2f74486d3","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"}],"rowLength":8,"columns":[{"name":"pid","type":{"code":13,"type":null}},{"name":"job_id","type":{"code":12,"type":null}},{"name":"jobstatus","type":{"code":13,"type":null}},{"name":"jobtype","type":{"code":13,"type":null}},{"name":"model","type":{"code":13,"type":null}},{"name":"accuracy","type":{"code":13,"type":null}},{"name":"prediction","type":{"code":13,"type":null}},{"name":"user_id","type":{"code":13,"type":null}}],"pageState":null}
+Time: 
+result : {"info":{"queriedHost":"127.0.0.1:9042","triedHosts":{},"achievedConsistency":10},"rows":[{"pid":"processCrashed","job_id":"190af2ee-c126-4ba7-8bfc-df333a124c1f","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"1b39b82f-9de7-4c61-ac47-bd1a754b218d","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"f02d1418-2c18-47c7-91b2-dedba35a983a","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"1de6dd77-1b55-43d5-8f91-57f70a2cf354","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"51c18afe-5fc1-49e4-a277-7f0b00762fa7","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"657c574e-f3a5-4f3c-9aa6-3fb3c467d019","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"e3b00d4f-3645-4628-9b3a-60c24e5d81b4","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"},{"pid":"processCrashed","job_id":"fbcc90ce-889a-4cdb-81da-76f2f74486d3","jobstatus":"crashed","jobtype":"training","model":null,"accuracy":null,"prediction":null,"user_id":"sjs7007testing"}],"rowLength":8,"columns":[{"name":"pid","type":{"code":13,"type":null}},{"name":"job_id","type":{"code":12,"type":null}},{"name":"jobstatus","type":{"code":13,"type":null}},{"name":"jobtype","type":{"code":13,"type":null}},{"name":"model","type":{"code":13,"type":null}},{"name":"accuracy","type":{"code":13,"type":null}},{"name":"prediction","type":{"code":13,"type":null}},{"name":"user_id","type":{"code":13,"type":null}}],"pageState":null}
+Time: 
+Request handler 'uploadCompleteScript' was called.
+about to parse.
+parsing done.
+{ upload: 
+   { domain: null,
+     _events: {},
+     _maxListeners: 10,
+     size: 11595438,
+     path: '/home/setty/S3Lab/S3LabUploads/MNIST_data.zip',
+     name: 'MNIST_data.zip',
+     type: 'application/zip',
+     hash: null,
+     lastModifiedDate: Wed Jul 20 2016 17:21:10 GMT-0400 (EDT),
+     _writeStream: 
+      { _writableState: [Object],
+        writable: true,
+        domain: null,
+        _events: {},
+        _maxListeners: 10,
+        path: '/home/setty/S3Lab/S3LabUploads/MNIST_data.zip',
+        fd: null,
+        flags: 'w',
+        mode: 438,
+        start: undefined,
+        pos: undefined,
+        bytesWritten: 11595438,
+        closed: true } } }
+File name : /home/setty/S3Lab/S3LabUploads/MNIST_data.zip
+Process started with PID : 18239 and title undefined
+
+Sending : {"width":"28","height":"28","nClass":"10","alpha":"0.01","File Name":"MNIST_data","modelID":"46eae17a-b875-4f3a-8e04-cabba50fcc18"}
+here2
+onJobCreationDB Error : null
+here1
+Step 0 (Epoch 0.00)
+(0.4075, 19481.771)
+
+here1
+Step 100 (Epoch 10.00)
+(0.89399999, 3627.9548)
+
+here1
+Step 200 (Epoch 20.00)
+(0.89889997, 3610.8489)
+
+here1
+Step 300 (Epoch 30.00)
+(0.9012, 3388.6228)
+
+here1
+Step 400 (Epoch 40.00)
+(0.90399998, 3396.4922)
+
+here1
+Step 500 (Epoch 50.00)
+(0.91049999, 3143.4392)
+
+here1
+Step 600 (Epoch 60.00)
+(0.9091, 3166.782)
+
+here1
+Step 700 (Epoch 70.00)
+(0.9138, 3056.1472)
+
+here1
+Step 800 (Epoch 80.00)
+(0.9145, 3029.0027)
+
+here1
+Step 900 (Epoch 90.00)
+(0.91759998, 2973.3247)
+
+here1
+[{"Epoch": 0.0, "Accuracy": "0.4075"}, {"Epoch": 10.0, "Accuracy": "0.894"}, {"Epoch": 20.0, "Accuracy": "0.8989"}, {"Epoch": 30.0, "Accuracy": "0.9012"}, {"Epoch": 40.0, "Accuracy": "0.904"}, {"Epoch": 50.0, "Accuracy": "0.9105"}, {"Epoch": 60.0, "Accuracy": "0.9091"}, {"Epoch": 70.0, "Accuracy": "0.9138"}, {"Epoch": 80.0, "Accuracy": "0.9145"}, {"Epoch": 90.0, "Accuracy": "0.9176"}, {"Epoch": 100.0, "Accuracy": "0.9132"}]
+
+onProcessSucessDB Error : null

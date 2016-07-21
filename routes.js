@@ -171,6 +171,7 @@ router.post("/generalPredictorImageUpload", function(request,response) {
 
 // 3. Endpoint for training and testing on the MNIST dataset 
 router.post("/uploadCompleteScript",function (request,response) {
+	var oldDataString = "";
 	helper.logExceptOnTest("Request handler 'uploadCompleteScript' was called.");
 	var form = new formidable.IncomingForm();
 	form.keepExtensions = true;
@@ -213,12 +214,15 @@ router.post("/uploadCompleteScript",function (request,response) {
 		jsonSend["modelID"]=UUID;
 		data = JSON.stringify(jsonSend) ;
 		helper.logExceptOnTest("Sending : "+data);
-
-
+		var modelPath = "/S3LabUploads/"+fileName+"_"+UUID+".ckpt";
+		response.setHeader('Content-Type', 'application/json');
 		py.stdout.on('data', function(data){
 		  helper.logExceptOnTest("here1");
 		  helper.logExceptOnTest(data.toString());
 		  dataString = data.toString();
+		  console.log("writing data");
+		  response.write(JSON.stringify({ Accuracy : dataString  , trainedModel : modelPath }));
+		  //response.end();
 		});
 
 		helper.logExceptOnTest("here2");
@@ -231,8 +235,6 @@ router.post("/uploadCompleteScript",function (request,response) {
 		});
 
 		py.stdout.on('end', function(){
-			
-			var modelPath = "/S3LabUploads/"+fileName+"_"+UUID+".ckpt";
 			var accuracyValue = "dummyForNow";
 
 			//skip things below if process was killed, 
@@ -241,8 +243,12 @@ router.post("/uploadCompleteScript",function (request,response) {
 				accuracyValue = accuracyValue[accuracyValue.length-1]['Accuracy'];
 			}
 			catch (err) {
+<<<<<<< HEAD
         hasCrashed = true;
 				helper.logExceptOnTest("error : "+err);
+=======
+				helper.logExceptOnTest("python error : "+err);
+>>>>>>> 61a425d7ef43d2a309ca79ff4c1cf39e3c0d46c0
 				accuracyValue = "null";
 			}
 			
@@ -258,7 +264,12 @@ router.post("/uploadCompleteScript",function (request,response) {
         response.write("Python process failed : maybe problem in tensorflow.");
         response.end();
 			}
+<<<<<<< HEAD
 			//console.log("->"+dataString)      
+=======
+			console.log('response end');
+			response.end();
+>>>>>>> 61a425d7ef43d2a309ca79ff4c1cf39e3c0d46c0
 		});
 		py.stdin.write(JSON.stringify(data));
 		py.stdin.end();
