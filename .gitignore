@@ -5,5 +5,7 @@
 *.ckpt
 *.ckpt.meta
 *.key
+*.pyc
+*.out
 /node_modules/*
 

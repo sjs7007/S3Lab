@@ -1,3 +1,10 @@
+/* Different socket events defined here 
+	 
+	 Currently only 1 event is there which is for training MNIST dataset when file upload happens. 
+	 If we need to add further events based on file upload we can specify in parameters field 
+	 what type of event it is and then route it to relevant code. 
+*/
+
 var socketio = require('socket.io');
 var dl = require('delivery');
 var fs = require('fs');

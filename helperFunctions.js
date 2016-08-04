@@ -1,3 +1,7 @@
+/*
+Code for general helper functions. 
+*/
+
 var cassandra = require('cassandra-driver');
 var client = new cassandra.Client({contactPoints: ['127.0.0.1:9042']});
 var fs = require('fs');
@@ -34,14 +38,14 @@ module.exports = {
 				var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
 
 				var data = {
-				  from: 'S3 Lab <postmaster@sandbox2796510b356d4fd5a02c639af3080887.mailgun.org>',
-				  to: toEmail ,
-				  subject: 'S3Lab Job Status Update',
-				  text: message
+					from: 'S3 Lab <postmaster@sandbox2796510b356d4fd5a02c639af3080887.mailgun.org>',
+					to: toEmail ,
+					subject: 'S3Lab Job Status Update',
+					text: message
 				};
 				 
 				mailgun.messages().send(data, function (error, body) {
-				  console.log(body);
+					console.log(body);
 				});
 			}
 		});
