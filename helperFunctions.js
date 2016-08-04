@@ -24,7 +24,7 @@ module.exports = {
 	},
 
 	sendEmailTo : function(toEmail,message) {
-		fs.readFile('mailgun.key','utf-8',function(err,data) {
+		fs.readFile('mailgun2.key','utf-8',function(err,data) {
 			if(err!=null) {
 				console.log("Mailgun API Key Error : "+err);
 			}
