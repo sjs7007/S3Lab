@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 *.Rhistory
 *.swo
 *.swp
@@ -6,14 +5,5 @@
 *.ckpt
 *.ckpt.meta
 *.key
-=======
-.Rhistory
-.swo
-.swp
-.swn
-.ckpt
-.ckpt.meta
-.key
->>>>>>> a2d0c0b9bfb94616845f0740e2ab180351f4ac66
 /node_modules/*
 
