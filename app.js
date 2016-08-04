@@ -16,8 +16,6 @@ var server = app.listen(8888, function () {
 	console.log('App listening on port 8888!');
 });
 
-
-
 // socket part 
 /*var io = require('socket.io').listen(server);
 

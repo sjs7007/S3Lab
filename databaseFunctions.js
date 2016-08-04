@@ -1,3 +1,7 @@
+/*
+Contains code for the database related functions such as update db, pull information from db. 
+*/
+
 var cassandra = require('cassandra-driver');
 var client = new cassandra.Client({contactPoints: ['127.0.0.1:9042']});
 var helper = require('./helperFunctions');
