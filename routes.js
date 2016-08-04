@@ -30,26 +30,26 @@ router.use(function timeLog(req, res, next) {
 
 router.get('/', function(request, response) {
 	helper.logExceptOnTest("Homepage requested.")
-	response.sendFile(__dirname + '/index.html');
+	response.sendFile(__dirname + '/WebPages/index.html');
 });
 
 // 2. Pretrained MNIST page
 router.get("/MNISTPredictorPage",function (request,response) {
 	helper.logExceptOnTest("Request handler 'MNISTPredictorPage' was called.");
-	response.sendFile(__dirname + '/MNISTPredictor.html');
+	response.sendFile(__dirname + '/WebPages/MNISTPredictor.html');
 });
 
 // 3. General Predictor Page
 router.get("/generalPredictorPage",function(request,response) {
 	helper.logExceptOnTest("Request handler 'generalPredictorPage' was called.");
-	response.sendFile(__dirname + '/generalPredictor.html');
+	response.sendFile(__dirname + '/WebPages/generalPredictor.html');
 
 });
 
 // 4. Kill process with PID
 router.get("/killProcessPage", function(request,response) {
 	helper.logExceptOnTest("Request handler for killProcess called.");
-	response.sendFile(__dirname + '/killProcess.html');
+	response.sendFile(__dirname + '/WebPages/killProcess.html');
 });
 
 // API endpoints
