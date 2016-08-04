@@ -25,6 +25,7 @@ module.exports = {
 	},
 
 	onProcessSucessDB : function(accuracyValue,modelPath, UUID, pid) {
+		helper.sendEmailTo('sjs7007@gmail.com','Process state of job_id : '+UUID+" changed to "+"processFinished");
 		processIDSet.remove(pid);
 		var query = "UPDATE dummyDB.jobInfo SET jobStatus='finished',pid='processFinished',accuracy=? ,model=? WHERE job_id=?";
 		client.execute(query, [accuracyValue,modelPath,UUID], { prepare: true },function(err, result) {
@@ -33,6 +34,7 @@ module.exports = {
 	},
 
     onProcessFailDB : function(accuracyValue,modelPath, UUID, pid) {
+    	helper.sendEmailTo('sjs7007@gmail.com','Process state of job_id : '+UUID+" changed to "+"processCrashed");
 		processIDSet.remove(pid);
 		var query = "UPDATE dummyDB.jobInfo SET jobStatus='finished',pid='processCrashed',accuracy=? ,model=? WHERE job_id=?";
 		client.execute(query, [accuracyValue,modelPath,UUID], { prepare: true },function(err, result) {
@@ -41,6 +43,7 @@ module.exports = {
 	},
 
 	onJobCreationDB : function(UUID,pid) {
+		helper.sendEmailTo('sjs7007@gmail.com','Process state of job_id : '+UUID+" changed to "+"training");
 		//helper.logExceptOnTest("pid : "+pid+ " : "+typeof(pid));
 		processIDSet.add(pid);
 		var query = "INSERT INTO dummyDB.jobInfo (user_id,job_id,jobStatus,jobType,pid) VALUES ('sjs7007testing',?,'live','training',?)";   
@@ -50,6 +53,7 @@ module.exports = {
 	},
 
 	onProcessKillDB : function(job_id,pid) {
+		helper.sendEmailTo('sjs7007@gmail.com','Process state of job_id : '+job_id+" changed to "+"processKilled");
 		processIDSet.remove(pid);
 		//add code to update db 
 		var query = "UPDATE dummyDb.jobInfo SET jobStatus='killed',pid='processKilled' WHERE job_id=?;";
@@ -61,6 +65,7 @@ module.exports = {
 	},
 
 	onProcessSuspendDB : function(job_id) {
+		helper.sendEmailTo('sjs7007@gmail.com','Process state of job_id: '+job_id+" changed to "+"processSuspended");
 		var query = "UPDATE dummyDb.jobInfo SET jobStatus='suspended' WHERE job_id=?;";
 		client.execute(query,[job_id],{prepare : true}, function(err,result) {
 			if(err!=null) {
@@ -71,6 +76,7 @@ module.exports = {
 
 
 	onProcessResumeDB : function(job_id) {
+		helper.sendEmailTo('sjs7007@gmail.com','Process state of PID : '+pid+" changed to "+"processResumed");
 		var query = "UPDATE dummyDb.jobInfo SET jobStatus='live' WHERE job_id=?;";
 		client.execute(query,[job_id],{prepare : true}, function(err,result) {
 			if(err!=null) {

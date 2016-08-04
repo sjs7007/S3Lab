@@ -4,4 +4,6 @@
 .swn
 .ckpt
 .ckpt.meta
+.key
 /node_modules/*
+
