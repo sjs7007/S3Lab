@@ -1,9 +1,9 @@
-.Rhistory
-.swo
-.swp
-.swn
-.ckpt
-.ckpt.meta
-.key
+*.Rhistory
+*.swo
+*.swp
+*.swn
+*.ckpt
+*.ckpt.meta
+*.key
 /node_modules/*
 
