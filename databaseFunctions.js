@@ -37,8 +37,8 @@ module.exports = {
 		});
 	},
 
-    onProcessFailDB : function(accuracyValue,modelPath, UUID, pid) {
-    	helper.sendEmailTo('sjs7007@gmail.com','Process state of job_id : '+UUID+" changed to "+"processCrashed");
+		onProcessFailDB : function(accuracyValue,modelPath, UUID, pid) {
+			helper.sendEmailTo('sjs7007@gmail.com','Process state of job_id : '+UUID+" changed to "+"processCrashed");
 		processIDSet.remove(pid);
 		var query = "UPDATE dummyDB.jobInfo SET jobStatus='finished',pid='processCrashed',accuracy=? ,model=? WHERE job_id=?";
 		client.execute(query, [accuracyValue,modelPath,UUID], { prepare: true },function(err, result) {
@@ -52,7 +52,7 @@ module.exports = {
 		processIDSet.add(pid);
 		var query = "INSERT INTO dummyDB.jobInfo (user_id,job_id,jobStatus,jobType,pid) VALUES ('sjs7007testing',?,'live','training',?)";   
 		client.execute(query, [UUID,pid.toString()], { prepare: true },function(err, result) {
-		  helper.logExceptOnTest("onJobCreationDB Error : "+err);
+			helper.logExceptOnTest("onJobCreationDB Error : "+err);
 		});
 	},
 
@@ -120,6 +120,18 @@ module.exports = {
 
 	processIDSetContains : function(pid) {
 		return processIDSet.contains(pid);
+	},
+
+	getModelPath : function(job_id,callback) {
+		var query = "SELECT model FROM dummyDB.jobInfo WHERE job_id=? ALLOW FILTERING;";
+		client.execute(query,[job_id], { prepare : true }, function(err,result) {
+			if(err) {
+				helper.logExceptOnTest("getModelPath Error : "+err);
+			}
+			else {
+				return callback(result);
+			}
+		});
 	}
 
 	/*dashboardPullDB(function(result) {
