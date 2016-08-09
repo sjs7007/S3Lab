@@ -54,7 +54,7 @@ router.get("/killProcessPage", function(request,response) {
 
 // API endpoints
 
-// 1. Upload the model for general predciton
+// 2.1 Upload the model for general predciton
 router.post("/generalPredictorModelUpload",function(request,response) {
 	helper.logExceptOnTest("Request handler for generalPredictorModelUpload called");
 
@@ -74,7 +74,7 @@ router.post("/generalPredictorModelUpload",function(request,response) {
 	});
 });
 
-// 2. Upload image to be used by general predictor
+// 2.2 Upload image to be used by general predictor
 router.post("/generalPredictorImageUpload", function(request,response) {
 	helper.logExceptOnTest("Request handler 'generalPredictorImageUpload' was called.");
 	var form = new formidable.IncomingForm();
@@ -118,7 +118,7 @@ router.post("/generalPredictorImageUpload", function(request,response) {
 
 });
 
-// 3. Endpoint for training and testing on the MNIST dataset
+// 1. Endpoint for training and testing on the MNIST dataset
 router.post("/uploadCompleteScript",function (request,response) {
 	var oldDataString = "";
 	helper.logExceptOnTest("Request handler 'uploadCompleteScript' was called.");
@@ -204,7 +204,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 
 });
 
-// 4. Endpoint for prediction on pretrained MNIST dataset
+// 3. Endpoint for prediction on pretrained MNIST dataset
 router.post("/MNISTPredictor", function(request,response) {
 	helper.logExceptOnTest("Request handler 'MNISTPredictor' was called.");
 	var form = new formidable.IncomingForm();
@@ -225,7 +225,7 @@ router.post("/MNISTPredictor", function(request,response) {
 
 		var spawn = require('child_process').spawn,
 				py    = spawn('python', [path.join(__dirname,"/MNISTPredictor",'/predictSavedModel.py')], {cwd:path.join(__dirname,"/MNISTPredictor")});
-
+dashbo
 		py.stdout.on('data', function(data){
 			helper.logExceptOnTest("here1 : "+data);
 			helper.logExceptOnTest(data.toString());
@@ -250,7 +250,27 @@ router.post("/MNISTPredictor", function(request,response) {
 
 });
 
-// 5. Kill process with specific job_id, also supply pid
+// 4. Get dashboard for all users
+
+router.get("/getDashboard",function(request,response) {
+	database.dashboardPullDB(function(result) {
+		helper.logExceptOnTest("result : "+JSON.stringify(result));
+		response.writeHead(200,{'Content-Type': 'application/json'});
+		response.end(JSON.stringify(result));
+	});
+});
+
+// 5. Get Dashboard selective : i.e. info about specific user
+
+router.get("/getDashboardSelective",function(request,response) {
+	database.dashboardPullDBSelective(function(result) {
+		helper.logExceptOnTest("result : "+JSON.stringify(result));
+		response.setHeader('Content-Type', 'application/json');
+		response.end(JSON.stringify(result));
+	},request.query.user_id);
+});
+
+// 6. Kill process with specific job_id, also supply pid
 router.post("/killProcess",function(request,response) {
 	var form = new formidable.IncomingForm();
 	form.parse(request,function(error,fields,files) {
@@ -299,7 +319,7 @@ router.post("/killProcess",function(request,response) {
 	});
 });
 
-// 8. Suspend job with specific UUID, also needs PID
+// 7. Suspend job with specific UUID, also needs PID
 router.post("/suspendProcess",function(request,response) {
 	var form = new formidable.IncomingForm();
 	form.parse(request,function(error,fields,files) {
@@ -348,7 +368,7 @@ router.post("/suspendProcess",function(request,response) {
 	});
 });
 
-// 9. Kill process with specific PID
+// 8. Resume process with specific job_id and PID
 router.post("/resumeProcess",function(request,response) {
 	var form = new formidable.IncomingForm();
 	form.parse(request,function(error,fields,files) {
@@ -397,24 +417,38 @@ router.post("/resumeProcess",function(request,response) {
 	});
 });
 
-// 6. Get dashboard for all users
+// 9. Select specific model on server and test with it
+// curl -F job_id=71cd6c9f-2bc1-4380-8d89-b32182441638 localhost:8888/testTrainedOnline 
+// just prints model path now 
 
-router.get("/getDashboard",function(request,response) {
-	database.dashboardPullDB(function(result) {
-		helper.logExceptOnTest("result : "+JSON.stringify(result));
-		response.writeHead(200,{'Content-Type': 'application/json'});
-		response.end(JSON.stringify(result));
+router.post("/testTrainedOnline",function(request,response) {
+	helper.logExceptOnTest("Received POST request for testTrainedOnline.");
+	var form = new formidable.IncomingForm();
+	form.keepExtensions = true;
+
+	form.on('fileBegin', function(name, file) {
+		file.path = "./testTrainedOnline/"+file.name;
+	});
+
+	form.parse(request,function(error,fields,files) {
+
+		//will contain selected job_id
+
+		var jsonSend = fields;
+		var selectedJobID = fields.job_id;
+		var modelPath = "";
+
+		//get path of model from db and store 
+		database.getModelPath(selectedJobID, function(result) {
+			helper.logExceptOnTest("result : ")+JSON.stringify(result);
+			response.setHeader('Content-Type', 'application/json');
+			response.end(JSON.stringify(result));
+		});
+
+		var currentJobID = uuid.v4();
+
 	});
 });
 
-// 7. Get Dashboard selective : i.e. info about specific user
-
-router.get("/getDashboardSelective",function(request,response) {
-	database.dashboardPullDBSelective(function(result) {
-		helper.logExceptOnTest("result : "+JSON.stringify(result));
-		response.setHeader('Content-Type', 'application/json');
-		response.end(JSON.stringify(result));
-	},request.query.user_id);
-});
 
 module.exports = router;

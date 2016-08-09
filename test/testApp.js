@@ -58,7 +58,7 @@ describe('DatabaseTest',function() {
 
 	//just automate socket call 
 	// no test
-	it('socket-call-test',function(done) {
+/*	it('socket-call-test',function(done) {
 		this.timeout(10000);
 
 		var socket = io.connect('http://0.0.0.0:8888');
@@ -83,11 +83,11 @@ describe('DatabaseTest',function() {
 					console.log('File sent successfully!');
 				});
 			});
-		});
+		}); */
 
-		socket.on('/trainingSocket/result',function(data) {
+		/*socket.on('/trainingSocket/result',function(data) {
 			console.log("On /trainingSocket/result socket endpoint : "+data);
 			done();
 		});
-	}); 
+	});*/ 
 });
