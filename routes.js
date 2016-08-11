@@ -141,7 +141,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 
 		var hasCrashed = false;
 		var spawn = require('child_process').spawn,
-			  py    = spawn('python', [path.join(__dirname,'/S3LabUploads','/newTest.py')], {cwd:path.join(__dirname,"/S3LabUploads")});
+				py    = spawn('python', [path.join(__dirname,'/S3LabUploads','/newTest.py')], {cwd:path.join(__dirname,"/S3LabUploads")});
 		var UUID = uuid.v4();
 
 		helper.logExceptOnTest("Process started with PID : "+py.pid+" and title "+py.title+"\n");
@@ -424,25 +424,55 @@ router.post("/resumeProcess",function(request,response) {
 router.post("/testTrainedOnline",function(request,response) {
 	helper.logExceptOnTest("Received POST request for testTrainedOnline.");
 	var form = new formidable.IncomingForm();
+	var imPath = "dummy";
 	form.keepExtensions = true;
 
 	form.on('fileBegin', function(name, file) {
 		file.path = "./testTrainedOnline/"+file.name;
+		//imPath = file.path;
 	});
 
 	form.parse(request,function(error,fields,files) {
 
 		//will contain selected job_id
 
-		var jsonSend = fields;
+		//var jsonSend = fields;
 		var selectedJobID = fields.job_id;
-		var modelPath = "";
+		var temp = "";
 
 		//get path of model from db and store 
 		database.getModelPath(selectedJobID, function(result) {
-			helper.logExceptOnTest("result : ")+JSON.stringify(result);
-			response.setHeader('Content-Type', 'application/json');
-			response.end(JSON.stringify(result));
+			var jsonSend = JSON.stringify({ modelPath : result.rows[0].model, imPath : files.upload.name });
+
+			var spawn = require('child_process').spawn;
+			var py = spawn('python',['-u',path.join(__dirname,'/testTrainedOnline','/generalPredictSavedModel.py')], {cwd: path.join(__dirname,"/testTrainedOnline")});
+
+			//input to script	
+			py.stdin.write(jsonSend);
+			py.stdin.end();
+
+			//on data from script 
+			py.stdout.on('data',function(data) {
+				temp = data;
+				helper.logExceptOnTest("testTrainedOnline stdout : "+data);
+			});
+
+			//on error
+			py.stderr.on('data',function(data) {
+				helper.logExceptOnTest("testTrainedOnline stderr : "+data);
+			});
+
+			//on end 
+			py.stdout.on('end',function() {
+				helper.logExceptOnTest("testTrainedOnline stdout ended : "+temp);
+				response.setHeader('Content-Type', 'application/json');
+			  response.end(JSON.stringify({"Prediction" : temp.toString() }));
+
+			});
+			//helper.logExceptOnTest("result : "+(result.rows[0].model));
+			//response.setHeader('Content-Type', 'application/json');
+			//response.end(JSON.stringify(result));
+
 		});
 
 		var currentJobID = uuid.v4();
