@@ -11,6 +11,7 @@ var path = require('path');
 var uuid = require('node-uuid');
 var helper = require('./helperFunctions');
 var database = require('./databaseFunctions');
+var jadeGen = require('./htmlGenerator');
 
 // Runs for all routes
 router.use(function timeLog(req, res, next) {
@@ -118,6 +119,10 @@ router.post("/generalPredictorImageUpload", function(request,response) {
 
 });
 
+router.get("/jade",function(request,response) {
+	jadeGen.getKillButton("1","2","3",response);
+});
+
 // 1. Endpoint for training and testing on the MNIST dataset
 router.post("/uploadCompleteScript",function (request,response) {
 	var oldDataString = "";
@@ -159,7 +164,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 			helper.logExceptOnTest("here1");
 			helper.logExceptOnTest(data.toString());
 			dataString = data.toString();
-			console.log("writing data");
+			//console.log("writing data");
 			response.write(JSON.stringify({ Accuracy : dataString  , trainedModel : modelPath }));
 			//response.end();
 		});
@@ -172,7 +177,10 @@ router.post("/uploadCompleteScript",function (request,response) {
 
 		py.stdout.on('end', function(){
 			var accuracyValue = "dummyForNow";
-			//skip things below if process was killed,
+			//skip things below if process was killed
+			//maintain a datastructure of active jobs
+			//if killed, job should be removed from set
+			//if not in set here -> killed, if killed -> don't update db since kill already updated
 			try {
 				accuracyValue = JSON.parse(dataString);
 				accuracyValue = accuracyValue[accuracyValue.length-1]['Accuracy'];
@@ -183,6 +191,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 				accuracyValue = "null";
 			}
 
+			//case 1 : normal , not killed, process ended , parsing was ok
 			if(!hasCrashed) {
 				database.onProcessSucessDB(dataString,modelPath,UUID,py.pid);
 				if(!response.headersSent) {
@@ -190,12 +199,15 @@ router.post("/uploadCompleteScript",function (request,response) {
 				}
 				response.end(JSON.stringify({ Accuracy : dataString  , trainedModel : modelPath }));
 			}
+			// case 2 : not killed but parsing issue
 			else {
 				database.onProcessFailDB(accuracyValue,"null",UUID,py.pid);
 				response.writeHead(500, {'content-type': 'text/html'});
 				response.write("Python process failed : maybe problem in tensorflow.");
 				response.end();
 			}
+			// case 3 : killed, db updated by kill api, so just tell user killed
+			
 		});
 		py.stdin.write(JSON.stringify(data));
 		py.stdin.end();
@@ -291,7 +303,7 @@ router.post("/killProcess",function(request,response) {
 					helper.logExceptOnTest("Invalid job ID : "+err);
 					helper.logExceptOnTest("Process killing failed : invalid job_id.");
 					response.writeHead(400, {"Content-Type": "text/html"});
-					response.write("Process killing failed : not a valid job_id.");
+					response.write("Process killing failed 1 : "+err);
 					response.end();
 				}
 				else {
@@ -310,7 +322,7 @@ router.post("/killProcess",function(request,response) {
 						//process killing failed
 						helper.logExceptOnTest("error : "+err);
 						response.writeHead(400, {"Content-Type": "text/html"});
-							response.write("Process killing failed : "+err);
+							response.write("Process killing failed 2: "+err);
 							response.end();
 					}
 				}

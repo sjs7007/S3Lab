@@ -6,6 +6,9 @@ var routes = require('./routes');
 var app = module.exports = express();
 var cors = require('cors');
 
+process.env.NODE_ENV = 'est';
+
+
 app.use(cors({origin: true}));
 
 app.use('/', routes);
@@ -28,3 +31,5 @@ without splitting in files
 
 // http://stackoverflow.com/questions/9709912/separating-file-server-and-socket-io-logic-in-node-js
 var io = require('./socketRoutes').listen(server);
+
+
