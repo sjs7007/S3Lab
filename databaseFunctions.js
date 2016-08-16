@@ -8,6 +8,8 @@ var helper = require('./helperFunctions');
 //https://www.npmjs.com/package/hashset-native
 var HashSet = require('hashset-native');
 var processIDSet = new HashSet.int32();
+var url = "http://localhost:8888";
+var htmlGen = require('./htmlGenerator')
 
 
 module.exports = {
@@ -37,8 +39,8 @@ module.exports = {
 		});
 	},
 
-		onProcessFailDB : function(accuracyValue,modelPath, UUID, pid) {
-			helper.sendEmailTo('sjs7007@gmail.com','Process state of job_id : '+UUID+" changed to "+"processCrashed");
+	onProcessFailDB : function(accuracyValue,modelPath, UUID, pid) {
+		helper.sendEmailTo('sjs7007@gmail.com','Process state of job_id : '+UUID+" changed to "+"processCrashed");
 		processIDSet.remove(pid);
 		var query = "UPDATE dummyDB.jobInfo SET jobStatus='finished',pid='processCrashed',accuracy=? ,model=? WHERE job_id=?";
 		client.execute(query, [accuracyValue,modelPath,UUID], { prepare: true },function(err, result) {
@@ -47,8 +49,9 @@ module.exports = {
 	},
 
 	onJobCreationDB : function(UUID,pid) {
-		helper.sendEmailTo('sjs7007@gmail.com','Process state of job_id : '+UUID+" changed to "+"training");
+		//helper.sendEmailTo('sjs7007@gmail.com','Process state of job_id : '+UUID+" changed to "+"training");
 		//helper.logExceptOnTest("pid : "+pid+ " : "+typeof(pid));
+		htmlGen.getKillButton(UUID,pid,url+"/killProcess",helper.sendMIMEEmailTo);
 		processIDSet.add(pid);
 		var query = "INSERT INTO dummyDB.jobInfo (user_id,job_id,jobStatus,jobType,pid) VALUES ('sjs7007testing',?,'live','training',?)";   
 		client.execute(query, [UUID,pid.toString()], { prepare: true },function(err, result) {
@@ -99,7 +102,7 @@ module.exports = {
 			else {
 				//helper.logExceptOnTest(result);
 				//helper.logExceptOnTest("---> "+result.rows[0]);
-				return callback(result);
+				callback(result);
 			}
 		});
 	},
@@ -113,7 +116,7 @@ module.exports = {
 			else {
 				//helper.logExceptOnTest(result);
 				//helper.logExceptOnTest("---> "+result.rows[0]);
-				return callback(result);
+				callback(result);
 			}
 		});
 	},
@@ -129,7 +132,7 @@ module.exports = {
 				helper.logExceptOnTest("getModelPath Error : "+err);
 			}
 			else {
-				return callback(result);
+				callback(result);
 			}
 		});
 	}

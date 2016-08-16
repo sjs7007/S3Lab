@@ -23,7 +23,8 @@ module.exports = {
 	validJobID : function(job_id,callback) {
 		var query = "SELECT job_id from dummyDb.jobInfo WHERE job_id=?;";
 		client.execute(query,[job_id],{prepare:true},function(err,res) {
-			return callback(err,res);
+			console.log(job_id+" "+err+" "+res);
+			callback(err,res);
 		});
 	},
 
@@ -50,5 +51,40 @@ module.exports = {
 			}
 		});
 
+	},
+
+	sendMIMEEmailTo : function(toEmail,message) {
+		fs.readFile('mailgun2.key','utf-8',function(err,api_key) {
+			if(err!=null) {
+				console.log("Mailgun MIME API key error : "+err);
+			}
+			else {
+				var domain = 'sandbox2796510b356d4fd5a02c639af3080887.mailgun.org';
+				var mailgun = require('mailgun-js')({ apiKey: api_key, domain: domain });
+				var mailcomposer = require('mailcomposer');
+
+				var mail = mailcomposer({
+					from: 'S3 Lab <postmaster@sandbox2796510b356d4fd5a02c639af3080887.mailgun.org>',
+					to: 'sjs7007@gmail.com',
+					subject: 'S3 Lab : Status Update',
+					body: 'Test email text',
+					html: message
+				});
+
+				mail.build(function(mailBuildError, message) {
+				var dataToSend = {
+						to: 'sjs7007@gmail.com',
+						message: message.toString('ascii')
+				};
+
+				mailgun.messages().sendMime(dataToSend, function (sendError, body) {
+						if (sendError) {
+								console.log(sendError);
+								return;
+						}
+					});
+				});
+			}
+		});
 	}
 }
