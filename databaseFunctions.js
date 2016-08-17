@@ -6,8 +6,6 @@ var cassandra = require('cassandra-driver');
 var client = new cassandra.Client({contactPoints: ['127.0.0.1:9042']});
 var helper = require('./helperFunctions');
 //https://www.npmjs.com/package/hashset-native
-var HashSet = require('hashset-native');
-var processIDSet = new HashSet.int32();
 var url = "http://localhost:8888";
 var htmlGen = require('./htmlGenerator')
 
@@ -32,7 +30,7 @@ module.exports = {
 
 	onProcessSucessDB : function(accuracyValue,modelPath, UUID, pid) {
 		helper.sendEmailTo('sjs7007@gmail.com','Process state of job_id : '+UUID+" changed to "+"processFinished");
-		processIDSet.remove(pid);
+		//processIDSet.remove(pid);
 		var query = "UPDATE dummyDB.jobInfo SET jobStatus='finished',pid='processFinished',accuracy=? ,model=? WHERE job_id=?";
 		client.execute(query, [accuracyValue,modelPath,UUID], { prepare: true },function(err, result) {
 			helper.logExceptOnTest("onProcessSucessDB Error : "+err);
@@ -52,7 +50,6 @@ module.exports = {
 		//helper.sendEmailTo('sjs7007@gmail.com','Process state of job_id : '+UUID+" changed to "+"training");
 		//helper.logExceptOnTest("pid : "+pid+ " : "+typeof(pid));
 		htmlGen.getKillButton(UUID,pid,url+"/killProcess",helper.sendMIMEEmailTo);
-		processIDSet.add(pid);
 		var query = "INSERT INTO dummyDB.jobInfo (user_id,job_id,jobStatus,jobType,pid) VALUES ('sjs7007testing',?,'live','training',?)";   
 		client.execute(query, [UUID,pid.toString()], { prepare: true },function(err, result) {
 			helper.logExceptOnTest("onJobCreationDB Error : "+err);
@@ -61,7 +58,7 @@ module.exports = {
 
 	onProcessKillDB : function(job_id,pid) {
 		helper.sendEmailTo('sjs7007@gmail.com','Process state of job_id : '+job_id+" changed to "+"processKilled");
-		processIDSet.remove(pid);
+		//processIDSet.remove(pid);
 		//add code to update db 
 		var query = "UPDATE dummyDb.jobInfo SET jobStatus='killed',pid='processKilled' WHERE job_id=?;";
 		client.execute(query,[job_id],{prepare : true}, function(err,result) {
