@@ -39,7 +39,7 @@ module.exports = {
 
 	onProcessFailDB : function(accuracyValue,modelPath, UUID, pid) {
 		helper.sendEmailTo('sjs7007@gmail.com','Process state of job_id : '+UUID+" changed to "+"processCrashed");
-		processIDSet.remove(pid);
+		//processIDSet.remove(pid);
 		var query = "UPDATE dummyDB.jobInfo SET jobStatus='finished',pid='processCrashed',accuracy=? ,model=? WHERE job_id=?";
 		client.execute(query, [accuracyValue,modelPath,UUID], { prepare: true },function(err, result) {
 			helper.logExceptOnTest("onProcessFailDB Error : "+err);
@@ -49,7 +49,15 @@ module.exports = {
 	onJobCreationDB : function(UUID,pid) {
 		//helper.sendEmailTo('sjs7007@gmail.com','Process state of job_id : '+UUID+" changed to "+"training");
 		//helper.logExceptOnTest("pid : "+pid+ " : "+typeof(pid));
-		htmlGen.getKillButton(UUID,pid,url+"/killProcess",helper.sendMIMEEmailTo);
+		htmlGen.getButton(UUID,url+"/killProcess","killProcess",function(killHTML) {
+			htmlGen.getButton(UUID,url+"/suspendProcess","suspendProcess",function(suspendHTML) {
+				htmlGen.getButton(UUID,url+"/resumeProcess","resumeProcess",function(resumeHTML) {
+					console.log(killHTML+suspendHTML+resumeHTML);
+					helper.sendMIMEEmailTo("sjs7007@gmail.com",killHTML+suspendHTML+resumeHTML);
+				});
+			});
+		});
+
 		var query = "INSERT INTO dummyDB.jobInfo (user_id,job_id,jobStatus,jobType,pid) VALUES ('sjs7007testing',?,'live','training',?)";   
 		client.execute(query, [UUID,pid.toString()], { prepare: true },function(err, result) {
 			helper.logExceptOnTest("onJobCreationDB Error : "+err);
