@@ -1,35 +1,58 @@
 //http://stackoverflow.com/questions/5924072/express-js-cant-get-my-static-files-why
 //http://stackoverflow.com/questions/22709882/how-to-suppress-application-logging-messages-from-a-node-js-application-when-run
 
+
 var express = require('express');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
 var routes = require('./routes');
-var app = module.exports = express();
-var cors = require('cors');
 
 process.env.NODE_ENV = 'est';
+var app = module.exports = express();
+var cors = require('cors');
+app.use("/S3LabUploads",express.static('S3LabUploads'));
+
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
+app.use(require('express-session')({
+    secret: 'apple banana', //only hardcoded here for testing
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use('/',routes);
+
+// passport serialize + deserialize 
+var Account = require('./models/account');
+passport.use(new LocalStrategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
+
+// database : mongoose
+mongoose.connect('mongodb://localhost/passport_local_mongoose_express4');
+
+var server = app.listen(5000,function() {
+   console.log('App listening on port 5000.'); 
+});
+
+
+
+var express = require('express');
+var app = module.exports = express();
+
 
 
 app.use(cors({origin: true}));
 
-app.use('/', routes);
-
-app.use("/S3LabUploads",express.static('S3LabUploads'));
-
-var server = app.listen(8888, function () {
-	console.log('App listening on port 8888!');
-});
-
-// socket part 
-/*var io = require('socket.io').listen(server);
-
-io.on('connection',function(socket) {
-	socket.emit('test','testFromServer2');
-});
-
-without splitting in files
-*/
-
-// http://stackoverflow.com/questions/9709912/separating-file-server-and-socket-io-logic-in-node-js
-var io = require('./socketRoutes').listen(server);
 
 

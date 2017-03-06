@@ -1,0 +1,18 @@
+CREATE KEYSPACE IF NOT EXISTS dummyDB WITH REPLICATION = { 'class': 'SimpleStrategy','replication_factor': 1 };
+
+
+CREATE TABLE dummyDB.jobInfo (user_id text, job_id UUID, model text, jobStatus text, jobType text, accuracy text, prediction text, PRIMARY KEY(job_id)); 
+
+INSERT INTO dummyDB.jobInfo (user_id,job_id,model,jobStatus,jobType,accuracy,prediction) VALUES ('sjs7007',756716f7-2e54-4715-9f00-91dcbea6cf50,null,'live','test',null,null);
+
+ALTER TABLE dummyDB.jobInfo ADD pid text;
+
+
+
+
+
+
+
+----------------------- 
+
+
