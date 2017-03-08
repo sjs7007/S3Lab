@@ -9,11 +9,12 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
+var cors = require('cors');
 var routes = require('./routes');
 
 process.env.NODE_ENV = 'est';
 var app = module.exports = express();
-var cors = require('cors');
+app.use(cors({origin: true}));
 app.use("/S3LabUploads",express.static('S3LabUploads'));
 
 
@@ -41,8 +42,8 @@ passport.deserializeUser(Account.deserializeUser());
 // database : mongoose
 mongoose.connect('mongodb://localhost/passport_local_mongoose_express4');
 
-var server = app.listen(5000,function() {
-   console.log('App listening on port 5000.'); 
+var server = app.listen(8888,function() {
+   console.log('App listening on port 8888.'); 
 });
 
 
@@ -52,7 +53,6 @@ var app = module.exports = express();
 
 
 
-app.use(cors({origin: true}));
 
 
 
