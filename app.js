@@ -15,8 +15,8 @@ app.use('/', routes);
 
 app.use("/S3LabUploads",express.static('S3LabUploads'));
 
-var server = app.listen(8888, function () {
-	console.log('App listening on port 8888!');
+var server = app.listen(8889, function () {
+	console.log('App listening on port 8889!');
 });
 
 // socket part 

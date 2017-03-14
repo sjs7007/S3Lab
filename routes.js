@@ -83,7 +83,8 @@ router.post("/generalPredictorModelUpload",function(request,response) {
 // 2.2 Upload image to be used by general predictor
 router.post("/generalPredictorImageUpload", function(request,response) {
 	helper.logExceptOnTest("Request handler 'generalPredictorImageUpload' was called.");
-
+	var data = "";
+	var name = "";
 	var form = new formidable.IncomingForm();
 	//store file with extension name 
 	form.keepExtensions = true;
@@ -91,18 +92,23 @@ router.post("/generalPredictorImageUpload", function(request,response) {
 	//set file location
 	form.on('fileBegin', function(name, file) {
 		file.path = "./generalPredictor/"+file.name;
-		data = file.name;
 	});
 
 	//store temporary output
 	var dataString = "";
 
 	form.parse(request,function(error,fields,files) {
-		helper.logExceptOnTest("File name : "+files.upload.path);
+		helper.logExceptOnTest("File name : "+files.upload.path+","+files.upload.name);
+	var spawn = require('child_process').spawn,
+		cpy = spawn('docker',['cp',files.upload.path,'settytest:/home/']);
+		name = files.upload.name;
+cpy.on('close', function() {
 
+	console.log("finished copying "+files.upload.path+"...");
 		//spawn child process for prediction
 		var spawn = require('child_process').spawn,
-		py    = spawn('python', [path.join(__dirname,"generalPredictor",'/generalPredictSavedModel.py')], {cwd:path.join(__dirname,"/generalPredictor")});
+		py    = spawn('docker', ['exec', '178d8405db16', 'python', '/home/generalPredictSavedModel2.py','/home/'+files.upload.name, '2>/dev/null']);
+
 
 		//input to script
 		py.stdin.write(JSON.stringify(data));
@@ -115,9 +121,9 @@ router.post("/generalPredictorImageUpload", function(request,response) {
 			dataString = data.toString();
 		});
 
-		//error messages on stderr from script
+		//error messages on tdetderr from script
 		py.stderr.on('data', function(data) {
-			helper.logExceptOnTest('stdout: ' + data);
+			helper.logExceptOnTest('stderr: ' + data);
 			dataString = data.toString();
 		});
 
@@ -127,6 +133,7 @@ router.post("/generalPredictorImageUpload", function(request,response) {
 				response.end(JSON.stringify({ Prediction : dataString.substring(0,dataString.length-1)}));
 		});
 
+	});
 	});
 
 });
@@ -158,7 +165,11 @@ router.post("/uploadCompleteScript",function (request,response) {
 
 		//spawn child process for training and testing 
 		var spawn = require('child_process').spawn,
-				py    = spawn('python', [path.join(__dirname,'/S3LabUploads','/newTest.py')], {cwd:path.join(__dirname,"/S3LabUploads")});
+				py    = spawn('docker', ['exec', '178d8405db16', 'python', '/home/newTest.py', '{"width":"28","height":"28","nClass":"10","alpha":"0.01","File Name":"MNIST_data","modelID":"modelID"}', '2>/dev/null']);
+
+
+
+
 		var job_id = uuid.v4();
 
 		//store model path for sending later 
@@ -186,8 +197,8 @@ router.post("/uploadCompleteScript",function (request,response) {
 
 		//stderr from script
 		py.stderr.on('data', function(data) {
-			hasCrashed = true;
-			helper.logExceptOnTest('stdout: ' + data);
+			//hasCrashed = true;
+			helper.logExceptOnTest('stderr: ' + data);
 			dataString = data.toString();
 		});
 		
@@ -241,7 +252,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 		
 
 	});
-
+	
 });
 
 // 3. Endpoint for prediction on pretrained MNIST dataset
@@ -281,7 +292,7 @@ router.post("/MNISTPredictor", function(request,response) {
 
 		//stderr
 		py.stderr.on('data', function(data) {
-			helper.logExceptOnTest('stdout: ' + data);
+			helper.logExceptOnTest('stderr: ' + data);
 			dataString = data.toString();
 		});
 
@@ -404,7 +415,7 @@ router.post("/resumeProcess",function(request,response) {
 			//try killing processs
 			try {
 				process.kill(processID,"SIGCONT");
-				database.onProcessKillDB(job_id,processID);
+				database.onProcessResumeDB(job_id,processID);
 				response.writeHead(200, {"Content-Type" : "text/html"});
 				response.end("Job : "+job_id+" resumed.");
 			}

@@ -2,7 +2,7 @@
 # learning rate : alpha, zipFileName :
 
 
-import tensorflow.examples.tutorials.mnist.input_data
+#import tensorflow.examples.tutorials.mnist.input_data
 import input_data
 import zipfile
 import sys, json
@@ -45,7 +45,7 @@ import tensorflow as tf
 EVAL_FREQUENCY = 100;
 NUM_EPOCHS = 10;
 BATCH_SIZE = 100;
-TRAIN_SIZE = 100000;
+TRAIN_SIZE = 10000;
 
 size = int(paramtersDict['width']) * int(paramtersDict['height'])
 #print "Input Vector Length : ",size
