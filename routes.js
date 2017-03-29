@@ -99,7 +99,7 @@ function isAuthenticated(req,res,next) {
 // 1. Home Page
 router.get('/loggedInPage', isAuthenticated, function(request, response) {
 	helper.logExceptOnTest("Homepage requested.")
-	response.sendFile(__dirname + '/webPages/index.html');
+	response.sendFile(__dirname + '/webPages/loggedInPage.html');
 });
 
 
