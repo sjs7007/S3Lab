@@ -49,7 +49,8 @@ router.post('/register', function(req,res) {
         }
 
         passport.authenticate('local')(req,res,function() {
-            res.redirect('/');
+		    //res.redirect('/');
+			res.status(200).send("Registration successful!");
         });
     });
 });
@@ -61,7 +62,8 @@ router.get('/login', function(req,res) {
 
 
 router.post('/login', passport.authenticate('local'), function(req, res) {
-    res.redirect('/loggedInPage');
+    	res.status(200).send("Authenticated!");
+	//res.redirect('/loggedInPage');
 })
 
 router.get('/logout', function(req, res) {
