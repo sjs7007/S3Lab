@@ -19,17 +19,3 @@ var server = app.listen(8889, function () {
 	console.log('App listening on port 8889!');
 });
 
-// socket part 
-/*var io = require('socket.io').listen(server);
-
-io.on('connection',function(socket) {
-	socket.emit('test','testFromServer2');
-});
-
-without splitting in files
-*/
-
-// http://stackoverflow.com/questions/9709912/separating-file-server-and-socket-io-logic-in-node-js
-var io = require('./socketRoutes').listen(server);
-
-

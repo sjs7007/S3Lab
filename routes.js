@@ -33,26 +33,26 @@ router.use(function timeLog(req, res, next) {
 
 router.get('/', function(request, response) {
 	helper.logExceptOnTest("Homepage requested.")
-	response.sendFile(__dirname + '/WebPages/index.html');
+	response.sendFile(__dirname + '/webPages/index.html');
 });
 
 // 2. Pretrained MNIST page
 router.get("/MNISTPredictorPage",function (request,response) {
 	helper.logExceptOnTest("Request handler 'MNISTPredictorPage' was called.");
-	response.sendFile(__dirname + '/WebPages/MNISTPredictor.html');
+	response.sendFile(__dirname + '/webPages/MNISTPredictor.html');
 });
 
 // 3. General Predictor Page
 router.get("/generalPredictorPage",function(request,response) {
 	helper.logExceptOnTest("Request handler 'generalPredictorPage' was called.");
-	response.sendFile(__dirname + '/WebPages/generalPredictor.html');
+	response.sendFile(__dirname + '/webPages/generalPredictor.html');
 
 });
 
 // 4. Kill process with PID
 router.get("/killProcessPage", function(request,response) {
 	helper.logExceptOnTest("Request handler for killProcess called.");
-	response.sendFile(__dirname + '/WebPages/killProcess.html');
+	response.sendFile(__dirname + '/webPages/killProcess.html');
 });
 
 // API endpoints
@@ -102,38 +102,37 @@ router.post("/generalPredictorImageUpload", function(request,response) {
 	var spawn = require('child_process').spawn,
 		cpy = spawn('docker',['cp',files.upload.path,'settytest:/home/']);
 		name = files.upload.name;
-cpy.on('close', function() {
+		
+		cpy.on('close', function() {
 
-	console.log("finished copying "+files.upload.path+"...");
-		//spawn child process for prediction
-		var spawn = require('child_process').spawn,
-		py    = spawn('docker', ['exec', '178d8405db16', 'python', '/home/generalPredictSavedModel2.py','/home/'+files.upload.name, '2>/dev/null']);
+			console.log("finished copying "+files.upload.path+"...");
+			//spawn child process for prediction
+			var spawn = require('child_process').spawn,
+			py = spawn('docker', ['exec', '178d8405db16', 'python', '/home/generalPredictSavedModel2.py','/home/'+files.upload.name, '2>/dev/null']);
 
+			//input to script
+			py.stdin.write(JSON.stringify(data));
+			py.stdin.end();
 
-		//input to script
-		py.stdin.write(JSON.stringify(data));
-		py.stdin.end();
+			//output onstdout from script
+			py.stdout.on('data', function(data){
+				helper.logExceptOnTest("here1 : "+data);
+				helper.logExceptOnTest(data.toString());
+				dataString = data.toString();
+			});
 
-		//output onstdout from script
-		py.stdout.on('data', function(data){
-			helper.logExceptOnTest("here1 : "+data);
-			helper.logExceptOnTest(data.toString());
-			dataString = data.toString();
-		});
+			//error messages on tdetderr from script
+			py.stderr.on('data', function(data) {
+				helper.logExceptOnTest('stderr: ' + data);
+				dataString = data.toString();
+			});
 
-		//error messages on tdetderr from script
-		py.stderr.on('data', function(data) {
-			helper.logExceptOnTest('stderr: ' + data);
-			dataString = data.toString();
-		});
-
-		//stdout done
-		py.stdout.on('end', function(){
-			response.setHeader('Content-Type', 'application/json');
+			//stdout done
+			py.stdout.on('end', function(){
+				response.setHeader('Content-Type', 'application/json');
 				response.end(JSON.stringify({ Prediction : dataString.substring(0,dataString.length-1)}));
+			});
 		});
-
-	});
 	});
 
 });
@@ -165,7 +164,7 @@ router.post("/uploadCompleteScript",function (request,response) {
 
 		//spawn child process for training and testing 
 		var spawn = require('child_process').spawn,
-				py    = spawn('docker', ['exec', '178d8405db16', 'python', '/home/newTest.py', '{"width":"28","height":"28","nClass":"10","alpha":"0.01","File Name":"MNIST_data","modelID":"modelID"}', '2>/dev/null']);
+		py = spawn('docker', ['exec', '178d8405db16', 'python', '/home/newTest.py', '{"width":"28","height":"28","nClass":"10","alpha":"0.01","File Name":"MNIST_data","modelID":"modelID"}', '2>/dev/null']);
 
 
 
@@ -246,11 +245,8 @@ router.post("/uploadCompleteScript",function (request,response) {
 					response.writeHead(500, {'content-type': 'text/html'});
 				}
 				response.end("Process was killed by user.");
-			}
-			
+			}		
 		});
-		
-
 	});
 	
 });
@@ -278,7 +274,7 @@ router.post("/MNISTPredictor", function(request,response) {
 
 		//spawn python process
 		var spawn = require('child_process').spawn,
-				py    = spawn('python', [path.join(__dirname,"/MNISTPredictor",'/predictSavedModel.py')], {cwd:path.join(__dirname,"/MNISTPredictor")});
+		py = spawn('python', [path.join(__dirname,"/MNISTPredictor",'/predictSavedModel.py')], {cwd:path.join(__dirname,"/MNISTPredictor")});
 		
 		//input to python
 		py.stdin.write(JSON.stringify(data));
@@ -402,7 +398,6 @@ router.post("/resumeProcess",function(request,response) {
 	var form = new formidable.IncomingForm();
 	form.parse(request,function(error,fields,files) {
 		job_id = fields.job_id;
-		//pid = parseInt(fields.pid);
 
 		if(processIDMap[job_id]==null) {
 			helper.logExceptOnTest("Job resuming failed : not found in map");
@@ -487,11 +482,7 @@ router.post("/testTrainedOnline",function(request,response) {
 			//response.end(JSON.stringify(result));
 
 		});
-
 		var currentJobID = uuid.v4();
-
 	});
 });
-
-
 module.exports = router;
