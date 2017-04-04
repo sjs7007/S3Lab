@@ -10,11 +10,16 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 var cors = require('cors');
+
+/*var corsOptions = {
+	credentials: true
+}*/
+
 var routes = require('./routes');
 
 process.env.NODE_ENV = 'est';
 var app = module.exports = express();
-app.use(cors({origin: true}));
+app.use(cors({origin: true,credentials: true}));
 app.use("/S3LabUploads",express.static('S3LabUploads'));
 
 
@@ -22,11 +27,12 @@ app.use("/S3LabUploads",express.static('S3LabUploads'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
+
 app.use(require('express-session')({
     secret: 'apple banana', //only hardcoded here for testing
-    resave: false,
-    saveUninitialized: false
+	cookie: { httpOnly: false }
 }));
+
 
 app.use(passport.initialize());
 app.use(passport.session());
