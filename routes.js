@@ -17,6 +17,8 @@ var processIDMap = new HashMap();
 
 var passport = require('passport');
 var Account = require('./models/account');
+var auth = require('./auth')();
+
 
 // Runs for all routes
 router.use(function timeLog(req, res, next) {
@@ -32,92 +34,77 @@ router.use(function timeLog(req, res, next) {
 
 
 router.get('/', function(req,res) {
-    console.log("Home page requested.");
-    res.sendFile(path.join(__dirname, '/webPages/index.html'));
+	console.log("Home page requested.");
+	res.sendFile(path.join(__dirname, '/webPages/index.html'));
 });
 
 router.get('/register', function(req,res) {
-    console.log("register page called");
-    res.sendFile(path.resolve(__dirname + '/webPages/register.html'));
+	console.log("register page called");
+	res.sendFile(path.resolve(__dirname + '/webPages/register.html'));
 });
 
 router.post('/register', function(req,res) {
-    console.log("data posted to register : "+req.body.username);
-    Account.register(new Account({ username : req.body.username}), req.body.password, function(err, account) {
-        if(err) {
-            res.send("Register error : "+err);
-        }
+	console.log("data posted to register : "+req.body.username);
+	Account.register(new Account({ username : req.body.username}), req.body.password, function(err, account) {
+		if(err) {
+			res.send("Register error : "+err);
+		}
 
-        passport.authenticate('local')(req,res,function() {
-		    //res.redirect('/');
+		auth.authenticateLocal()(req,res,function() {
+			//res.redirect('/');
 			res.status(200).send("Registration successful!");
-        });
-    });
+		});
+	});
 });
 
 router.get('/login', function(req,res) {
-    console.log("login page requested.");
-    res.sendFile(path.resolve(__dirname + '/webPages/login.html'));
+	console.log("login page requested.");
+	res.sendFile(path.resolve(__dirname + '/webPages/login.html'));
 });
 
 
-router.post('/login', passport.authenticate('local'), function(req, res) {
-    	res.status(200).send("Authenticated!");
+router.post('/login', auth.authenticateLocal(), function(req, res) {
+		res.status(200).send("Authenticated!");
 	//res.redirect('/loggedInPage');
 })
 
 router.get('/logout', function(req, res) {
-    req.logout();
-    res.redirect('/');
+	req.logout();
+	res.redirect('/');
 });
 
 router.get('/ping', function(req,res) {
-    res.status(200).send("pong!");
+	res.status(200).send("pong!");
 });
 
-router.get('/pingAuth', function(req,res) {
-    if(req.isAuthenticated()) {
-        res.status(200).send("pong authenticated!");
-    }
-    else {
-        res.status(403).send("login first!");
-    }
+router.get('/pingAuth', auth.authenticateToken(),function(req,res) {
+	res.status(200).send("pong authenticated!");
 });
-
-function isAuthenticated(req,res,next) {
-  //console.log('request in isAuthenticated :', req);
-  //console.log('response in isAuthenticated : ', res);
-  console.log('isAuthenticated : ', req.isAuthenticated());
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.send('You need to be logged in!');
-}
 
 //Basic HTML Page renders
 // 1. Home Page
 
-router.get('/loggedInPage', isAuthenticated, function(request, response) {
+router.get('/loggedInPage', auth.authenticateToken , function(request, response) {
 	helper.logExceptOnTest("Homepage requested.")
 	response.sendFile(__dirname + '/WebPages/index.html');
 });
 
 
 // 2. Pretrained MNIST page
-router.get("/MNISTPredictorPage", isAuthenticated,  function (request,response) {
+router.get("/MNISTPredictorPage", auth.authenticateToken ,  function (request,response) {
 	helper.logExceptOnTest("Request handler 'MNISTPredictorPage' was called.");
 	response.sendFile(__dirname + '/WebPages/MNISTPredictor.html');
 });
 
 // 3. General Predictor Page
-router.get("/generalPredictorPage", isAuthenticated, function(request,response) {
+router.get("/generalPredictorPage", auth.authenticateToken , function(request,response) {
 	helper.logExceptOnTest("Request handler 'generalPredictorPage' was called.");
 	response.sendFile(__dirname + '/WebPages/generalPredictor.html');
 
 });
 
 // 4. Kill process with PID
-router.get("/killProcessPage", isAuthenticated,  function(request,response) {
+router.get("/killProcessPage", auth.authenticateToken ,  function(request,response) {
 	helper.logExceptOnTest("Request handler for killProcess called.");
 	response.sendFile(__dirname + '/WebPages/killProcess.html');
 });
@@ -125,7 +112,7 @@ router.get("/killProcessPage", isAuthenticated,  function(request,response) {
 // API endpoints
 
 // 2.1 Upload the model for general predciton
-router.post("/generalPredictorModelUpload", isAuthenticated, function(request,response) {
+router.post("/generalPredictorModelUpload", auth.authenticateToken , function(request,response) {
 	helper.logExceptOnTest("Request handler for generalPredictorModelUpload called");
 
 	var form = new formidable.IncomingForm();
@@ -148,7 +135,7 @@ router.post("/generalPredictorModelUpload", isAuthenticated, function(request,re
 });
 
 // 2.2 Upload image to be used by general predictor
-router.post("/generalPredictorImageUpload", isAuthenticated, function(request,response) {
+router.post("/generalPredictorImageUpload", auth.authenticateToken , function(request,response) {
 	helper.logExceptOnTest("Request handler 'generalPredictorImageUpload' was called.");
 
 	var form = new formidable.IncomingForm();
@@ -199,7 +186,7 @@ router.post("/generalPredictorImageUpload", isAuthenticated, function(request,re
 });
 
 // 1. Endpoint for training and testing on the MNIST dataset
-router.post("/uploadCompleteScript", isAuthenticated, function (request,response) {
+router.post("/uploadCompleteScript", auth.authenticateToken , function (request,response) {
 	helper.logExceptOnTest("Request handler 'uploadCompleteScript' was called.");
 
 	//set response header
@@ -312,7 +299,7 @@ router.post("/uploadCompleteScript", isAuthenticated, function (request,response
 });
 
 // 3. Endpoint for prediction on pretrained MNIST dataset
-router.post("/MNISTPredictor", isAuthenticated, function(request,response) {
+router.post("/MNISTPredictor", auth.authenticateToken , function(request,response) {
 	helper.logExceptOnTest("Request handler 'MNISTPredictor' was called.");
 
 	var form = new formidable.IncomingForm();
@@ -363,7 +350,7 @@ router.post("/MNISTPredictor", isAuthenticated, function(request,response) {
 
 // 4. Get dashboard for all users
 
-router.get("/getDashboard",isAuthenticated, function(request,response) {
+router.get("/getDashboard",auth.authenticateToken , function(request,response) {
 	console.log('getting dashboard : ');
 	database.dashboardPullDB(function(result) {
 		helper.logExceptOnTest("result : "+JSON.stringify(result));
@@ -374,7 +361,7 @@ router.get("/getDashboard",isAuthenticated, function(request,response) {
 
 // 5. Get Dashboard selective : i.e. info about specific user
 
-router.get("/getDashboardSelective",isAuthenticated, function(request,response) {
+router.get("/getDashboardSelective",auth.authenticateToken , function(request,response) {
 	database.dashboardPullDBSelective(function(result) {
 		helper.logExceptOnTest("result : "+JSON.stringify(result));
 		response.setHeader('Content-Type', 'application/json');
@@ -385,7 +372,7 @@ router.get("/getDashboardSelective",isAuthenticated, function(request,response) 
 
 
 // 6. Kill process with specific job_id, also supply pid
-router.post("/killProcess",isAuthenticated,function(request,response) {
+router.post("/killProcess",auth.authenticateToken ,function(request,response) {
 	var form = new formidable.IncomingForm();
 	form.parse(request,function(error,fields,files) {
 		job_id = fields.job_id;
@@ -420,7 +407,7 @@ router.post("/killProcess",isAuthenticated,function(request,response) {
 
 
 // 7. Suspend job with specific job_id, also needs PID
-router.post("/suspendProcess",isAuthenticated,function(request,response) {
+router.post("/suspendProcess",auth.authenticateToken ,function(request,response) {
 	var form = new formidable.IncomingForm();
 	form.parse(request,function(error,fields,files) {
 		job_id = fields.job_id;
@@ -455,7 +442,7 @@ router.post("/suspendProcess",isAuthenticated,function(request,response) {
 
 
 // 8. Resume process with specific job_id and PID
-router.post("/resumeProcess",isAuthenticated,function(request,response) {
+router.post("/resumeProcess",auth.authenticateToken ,function(request,response) {
 	var form = new formidable.IncomingForm();
 	form.parse(request,function(error,fields,files) {
 		job_id = fields.job_id;
@@ -491,7 +478,7 @@ router.post("/resumeProcess",isAuthenticated,function(request,response) {
 // curl -F job_id=71cd6c9f-2bc1-4380-8d89-b32182441638 localhost:8888/testTrainedOnline 
 // just prints model path now 
 
-router.post("/testTrainedOnline",isAuthenticated,function(request,response) {
+router.post("/testTrainedOnline",auth.authenticateToken ,function(request,response) {
 	helper.logExceptOnTest("Received POST request for testTrainedOnline.");
 	var form = new formidable.IncomingForm();
 	var imPath = "dummy";
