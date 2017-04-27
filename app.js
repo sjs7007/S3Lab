@@ -10,6 +10,7 @@ var cors = require('cors');
 }*/
 var auth = require('./auth.js')();
 var routes = require('./routes');
+var modelDBRoutes = require('./modelDBRoutes');
 
 process.env.NODE_ENV = 'est';
 
@@ -19,6 +20,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(auth.initialize()); 
 app.use('/',routes);
+app.use('/',modelDBRoutes);
+
 
 var server = app.listen(8889,function() {
    console.log('App listening on port 8889.'); 

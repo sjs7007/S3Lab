@@ -29,7 +29,7 @@ router.use(function timeLog(req, res, next) {
 	helper.logExceptOnTest('Time: ', Date.now());
 	//cleare database on app start
 	if(!alreadyRunning) {
-	//	database.onDatabaseStart();
+		database.onDatabaseStart();
 	}
 	alreadyRunning = true;
 	next();
@@ -301,13 +301,9 @@ router.post("/uploadCompleteScript", auth.authenticateToken() , function (reques
 					response.writeHead(500, {'content-type': 'text/html'});
 				}
 				response.end("Process was killed by user.");
-			}
-			
+			}		
 		});
-		
-
 	});
-
 });
 
 // 3. Endpoint for prediction on pretrained MNIST dataset
@@ -417,7 +413,6 @@ router.post("/killProcess",auth.authenticateToken() ,function(request,response) 
 	});
 });
 
-
 // 7. Suspend job with specific job_id, also needs PID
 router.post("/suspendProcess",auth.authenticateToken() ,function(request,response) {
 	var form = new formidable.IncomingForm();
@@ -450,8 +445,6 @@ router.post("/suspendProcess",auth.authenticateToken() ,function(request,respons
 
 	});
 });
-
-
 
 // 8. Resume process with specific job_id and PID
 router.post("/resumeProcess",auth.authenticateToken() ,function(request,response) {
@@ -538,16 +531,9 @@ router.post("/testTrainedOnline",auth.authenticateToken() ,function(request,resp
 			  response.end(JSON.stringify({"Prediction" : temp.toString() }));
 
 			});
-			//helper.logExceptOnTest("result : "+(result.rows[0].model));
-			//response.setHeader('Content-Type', 'application/json');
-			//response.end(JSON.stringify(result));
-
 		});
-
 		var currentJobID = uuid.v4();
-
 	});
 });
-
 
 module.exports = router;
