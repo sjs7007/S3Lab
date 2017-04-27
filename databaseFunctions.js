@@ -19,11 +19,18 @@ module.exports = {
 		helper.logExceptOnTest("Clearing up Database...");
 		var query = " SELECT job_id FROM DeepCloud.jobInfo  WHERE jobstatus='live' ALLOW FILTERING;";
 		client.execute(query, { prepare: true },function(err,result) {
-			for(var i=0;i<result.rows.length;i++) {
-				var query2= "UPDATE DeepCloud.jobInfo SET jobstatus='crashed',pid='processCrashed' WHERE job_id=?;"; 
-				client.execute(query2,[result.rows[i].job_id],  { prepare: true },function(err2,result2) {
-					helper.logExceptOnTest("onDatabaseStart Error : "+err2);
-				});
+			if(err) {
+				helper.logExceptOnTest("onDatabaseStart Error : "+err);	
+			}
+			else {
+				for(var i=0;i<result.rows.length;i++) {
+					var query2= "UPDATE DeepCloud.jobInfo SET jobstatus='crashed',pid='processCrashed' WHERE job_id=?;"; 
+					client.execute(query2,[result.rows[i].job_id],  { prepare: true },function(err2,result2) {
+						if(err2) {
+							helper.logExceptOnTest("onDatabaseStart Error : "+err2);						
+						}
+					});
+				}
 			}
 		});
 	},
@@ -33,7 +40,9 @@ module.exports = {
 		//processIDSet.remove(pid);
 		var query = "UPDATE DeepCloud.jobInfo SET jobStatus='finished',pid='processFinished',accuracy=? ,model=? WHERE job_id=?";
 		client.execute(query, [accuracyValue,modelPath,UUID], { prepare: true },function(err, result) {
-			helper.logExceptOnTest("onProcessSucessDB Error : "+err);
+			if(err) {
+				helper.logExceptOnTest("onProcessSucessDB Error : "+err);
+			}
 		});
 	},
 
@@ -42,7 +51,9 @@ module.exports = {
 		//processIDSet.remove(pid);
 		var query = "UPDATE DeepCloud.jobInfo SET jobStatus='finished',pid='processCrashed',accuracy=? ,model=? WHERE job_id=?";
 		client.execute(query, [accuracyValue,modelPath,UUID], { prepare: true },function(err, result) {
-			helper.logExceptOnTest("onProcessFailDB Error : "+err);
+			if(err) {
+				helper.logExceptOnTest("onProcessFailDB Error : "+err);
+			}
 		});
 	},
 
