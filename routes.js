@@ -98,7 +98,7 @@ router.get('/pingAuth', auth.authenticateToken(),function(req,res) {
 
 router.get('/loggedInPage', auth.authenticateToken() , function(request, response) {
 	helper.logExceptOnTest("Homepage requested.")
-	response.sendFile(__dirname + '/webPages/index.html');
+	response.sendFile(__dirname + '/webPages/loggedInPage.html');
 });
 
 
